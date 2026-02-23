@@ -261,6 +261,7 @@ def create_new_taxii_config(session, taxii_config_name: str, api_root_url:str, u
     resp = session.post(f'{SPLUNK_ADMIN_URL}/servicesNS/-/{CTIS_APP_NAME}/TA_CTIS_TAXII_taxii_config', data={
         'name': taxii_config_name,
         'api_root_url': api_root_url,
+        'auth_type': 'basic',
         'username': username,
         'password': password,
     }, params=DEFAULT_REQUEST_PARAMS)
