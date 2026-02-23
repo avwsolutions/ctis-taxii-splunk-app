@@ -1,5 +1,6 @@
 from common import AbstractRestHandler
 import logging
+from requests_auth import api_root_from_dict
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -12,6 +13,6 @@ class ListTaxiiCollectionsHandler(AbstractRestHandler):
         config_name = query_params.get("config_name")[0]
         logger.info(f"config_name: {config_name}")
         config = self.get_taxii_config(session_key=session_key, stanza_name=config_name)
-        api_root = self.get_api_root(url=config["api_root_url"], user=config["username"], password=config["password"])
+        api_root = api_root_from_dict(config=config)
         collections = api_root.collections
         return {"collections": [x._raw for x in collections]}

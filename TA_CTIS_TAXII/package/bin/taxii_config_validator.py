@@ -5,8 +5,7 @@ from solnlib import log
 import logging
 from const import ADDON_NAME_LOWER
 import requests
-from taxii2client.v21 import ApiRoot
-from requests_auth import TokenAuth
+from requests_auth import api_root_from_dict
 
 logger = log.Logs().get_logger(f"{ADDON_NAME_LOWER}.{__name__}")
 logger.setLevel(logging.INFO)
@@ -33,25 +32,6 @@ def _validate_connection(api_root):
         logger.exception(f"Connection to {api_root.url} failed: {e}")
         raise RestError(message=f"Connection to {api_root.url} failed: {e}", status=400)
 
-
-
-API_ROOT_URL = "api_root_url"
-
-def api_root_from_payload(payload: dict) -> ApiRoot:
-    api_root_url = payload.get(API_ROOT_URL)
-    auth_type = payload.get("auth_type")
-    if auth_type == 'basic':
-        username = payload.get("username")
-        password = payload.get("password")
-        return ApiRoot(url=api_root_url, user=username, password=password)
-    elif auth_type == 'custom':
-        http_header_name = payload.get("http_header_name")
-        http_header_value = payload.get("http_header_value")
-        return ApiRoot(url=api_root_url, auth=TokenAuth(http_header_name=http_header_name, http_header_value=http_header_value))
-    else:
-        raise NotImplementedError(f"Unsupported authentication type: {auth_type}")
-
-
 class CustomConnectionValidator(AdminExternalHandler):
     def __init__(self, *args, **kwargs):
         AdminExternalHandler.__init__(self, *args, **kwargs)
@@ -60,11 +40,11 @@ class CustomConnectionValidator(AdminExternalHandler):
         AdminExternalHandler.handleList(self, confInfo)
 
     def handleEdit(self, confInfo):
-        _validate_connection(api_root=api_root_from_payload(self.payload))
+        _validate_connection(api_root=api_root_from_dict(self.payload))
         AdminExternalHandler.handleEdit(self, confInfo)
 
     def handleCreate(self, confInfo):
-        _validate_connection(api_root=api_root_from_payload(self.payload))
+        _validate_connection(api_root=api_root_from_dict(self.payload))
         AdminExternalHandler.handleCreate(self, confInfo)
 
     def handleRemove(self, confInfo):

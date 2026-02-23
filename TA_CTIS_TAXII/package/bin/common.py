@@ -18,6 +18,7 @@ from models.kvstore_collections import CollectionName, KVStoreCollectionsContext
 from server_exception import ServerException
 from solnlib.log import Logs
 from solnlib.splunkenv import make_splunkhome_path
+from requests_auth import api_root_from_dict
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -111,14 +112,14 @@ class AbstractRestHandler(abc.ABC):
         taxii_config_conf = cfm.get_conf(conf_name)
         return taxii_config_conf.get(stanza_name)
 
+    # TODO: Remove this (unused)
     def get_api_root(self, url: str, user: str, password: str) -> ApiRoot:
         api_root = ApiRoot(url=url, user=user, password=password)
         add_request_response_logging_hook(taxii_endpoint=api_root, app_logger=logger)
         return api_root
 
     def get_taxii_collection(self, taxii_config: dict, collection_id: str) -> Collection:
-        api_root = self.get_api_root(url=taxii_config["api_root_url"], user=taxii_config["username"],
-                                password=taxii_config["password"])
+        api_root = api_root_from_dict(config=taxii_config)
 
         collection_id_to_collection = {c.id: c for c in api_root.collections}
         if collection_id not in collection_id_to_collection:
