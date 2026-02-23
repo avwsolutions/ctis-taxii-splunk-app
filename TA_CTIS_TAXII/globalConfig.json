@@ -52,19 +52,93 @@
                             "required": true
                         },
                         {
+                            "type": "singleSelect",
+                            "label": "Authentication Type",
+                            "field": "auth_type",
+                            "help": "Authentication type to connect to the TAXII server.",
+                            "required": true,
+                            "options": {
+                                "autoCompleteFields": [
+                                    {
+                                        "label": "Basic",
+                                        "value": "basic"
+                                    },
+                                    {
+                                        "label": "Bearer Token",
+                                        "value": "bearer_token"
+                                    },
+                                    {
+                                        "label": "API Key",
+                                        "value": "api_key"
+                                    }
+                                ]
+                            },
+                            "modifyFieldsOnValue": [
+                                {
+                                    "fieldValue": "basic",
+                                    "fieldsToModify": [
+                                        {
+                                            "fieldId": "username",
+                                            "required": true,
+                                            "display": true
+                                        },
+                                        {
+                                            "fieldId": "password",
+                                            "required": true,
+                                            "display": true
+                                        }
+                                    ]
+                                },
+                                {
+                                    "fieldValue": "bearer_token",
+                                    "fieldsToModify": [
+                                        {
+                                            "fieldId": "username",
+                                            "required": false,
+                                            "display": false
+                                        },
+                                        {
+                                            "fieldId": "password",
+                                            "required": false,
+                                            "display": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "fieldValue": "api_key",
+                                    "fieldsToModify": [
+                                        {
+                                            "fieldId": "username",
+                                            "required": false,
+                                            "display": false
+                                        },
+                                        {
+                                            "fieldId": "password",
+                                            "required": false,
+                                            "display": false
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
                             "type": "text",
                             "label": "Username",
                             "field": "username",
                             "help": "Username",
-                            "required": true
+                            "options": {
+                                "display": false
+                            }
                         },
                         {
                             "type": "text",
                             "label": "Password",
                             "field": "password",
                             "help": "Password",
-                            "required": true,
-                            "encrypted": true
+                            "encrypted": true,
+                            "options": {
+                                "display": false
+                            }
                         }
                     ],
                     "title": "TAXII Configurations"
@@ -149,7 +223,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.16.0+8a06ed7",
+        "version": "1.16.1+df78057",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [
