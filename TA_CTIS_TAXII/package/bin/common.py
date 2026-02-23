@@ -112,12 +112,6 @@ class AbstractRestHandler(abc.ABC):
         taxii_config_conf = cfm.get_conf(conf_name)
         return taxii_config_conf.get(stanza_name)
 
-    # TODO: Remove this (unused)
-    def get_api_root(self, url: str, user: str, password: str) -> ApiRoot:
-        api_root = ApiRoot(url=url, user=user, password=password)
-        add_request_response_logging_hook(taxii_endpoint=api_root, app_logger=logger)
-        return api_root
-
     def get_taxii_collection(self, taxii_config: dict, collection_id: str) -> Collection:
         api_root = api_root_from_dict(config=taxii_config)
 
