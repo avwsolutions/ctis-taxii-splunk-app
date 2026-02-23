@@ -64,12 +64,8 @@
                                         "value": "basic"
                                     },
                                     {
-                                        "label": "Bearer Token",
-                                        "value": "bearer_token"
-                                    },
-                                    {
-                                        "label": "API Key",
-                                        "value": "api_key"
+                                        "label": "API Key / Bearer Token",
+                                        "value": "custom"
                                     }
                                 ]
                             },
@@ -86,11 +82,21 @@
                                             "fieldId": "password",
                                             "required": true,
                                             "display": true
+                                        },
+                                        {
+                                            "fieldId": "http_header_name",
+                                            "required": false,
+                                            "display": false
+                                        },
+                                        {
+                                            "fieldId": "http_header_value",
+                                            "required": false,
+                                            "display": false
                                         }
                                     ]
                                 },
                                 {
-                                    "fieldValue": "bearer_token",
+                                    "fieldValue": "custom",
                                     "fieldsToModify": [
                                         {
                                             "fieldId": "username",
@@ -101,21 +107,16 @@
                                             "fieldId": "password",
                                             "required": false,
                                             "display": false
-                                        }
-                                    ]
-                                },
-                                {
-                                    "fieldValue": "api_key",
-                                    "fieldsToModify": [
-                                        {
-                                            "fieldId": "username",
-                                            "required": false,
-                                            "display": false
                                         },
                                         {
-                                            "fieldId": "password",
-                                            "required": false,
-                                            "display": false
+                                            "fieldId": "http_header_name",
+                                            "required": true,
+                                            "display": true
+                                        },
+                                        {
+                                            "fieldId": "http_header_value",
+                                            "required": true,
+                                            "display": true
                                         }
                                     ]
                                 }
@@ -135,6 +136,26 @@
                             "label": "Password",
                             "field": "password",
                             "help": "Password",
+                            "encrypted": true,
+                            "options": {
+                                "display": false
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "label": "HTTP Header Name",
+                            "field": "http_header_name",
+                            "help": "The HTTP Header to set HTTP Header Value as.",
+                            "defaultValue": "Authorization",
+                            "options": {
+                                "display": false
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "label": "HTTP Header Value",
+                            "field": "http_header_value",
+                            "help": "Example: 'Bearer <token>' or your API Key Value",
                             "encrypted": true,
                             "options": {
                                 "display": false
@@ -223,7 +244,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.16.1+df78057",
+        "version": "1.16.1+047917f",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [
