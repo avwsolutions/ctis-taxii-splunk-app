@@ -52,19 +52,114 @@
                             "required": true
                         },
                         {
+                            "type": "singleSelect",
+                            "label": "Authentication Type",
+                            "field": "auth_type",
+                            "help": "Authentication type to connect to the TAXII server.",
+                            "required": true,
+                            "options": {
+                                "autoCompleteFields": [
+                                    {
+                                        "label": "Basic",
+                                        "value": "basic"
+                                    },
+                                    {
+                                        "label": "API Key / Bearer Token",
+                                        "value": "custom"
+                                    }
+                                ]
+                            },
+                            "modifyFieldsOnValue": [
+                                {
+                                    "fieldValue": "basic",
+                                    "fieldsToModify": [
+                                        {
+                                            "fieldId": "username",
+                                            "required": true,
+                                            "display": true
+                                        },
+                                        {
+                                            "fieldId": "password",
+                                            "required": true,
+                                            "display": true
+                                        },
+                                        {
+                                            "fieldId": "http_header_name",
+                                            "required": false,
+                                            "display": false
+                                        },
+                                        {
+                                            "fieldId": "http_header_value",
+                                            "required": false,
+                                            "display": false
+                                        }
+                                    ]
+                                },
+                                {
+                                    "fieldValue": "custom",
+                                    "fieldsToModify": [
+                                        {
+                                            "fieldId": "username",
+                                            "required": false,
+                                            "display": false
+                                        },
+                                        {
+                                            "fieldId": "password",
+                                            "required": false,
+                                            "display": false
+                                        },
+                                        {
+                                            "fieldId": "http_header_name",
+                                            "required": true,
+                                            "display": true
+                                        },
+                                        {
+                                            "fieldId": "http_header_value",
+                                            "required": true,
+                                            "display": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
                             "type": "text",
                             "label": "Username",
                             "field": "username",
                             "help": "Username",
-                            "required": true
+                            "options": {
+                                "display": false
+                            }
                         },
                         {
                             "type": "text",
                             "label": "Password",
                             "field": "password",
                             "help": "Password",
-                            "required": true,
-                            "encrypted": true
+                            "encrypted": true,
+                            "options": {
+                                "display": false
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "label": "HTTP Header Name",
+                            "field": "http_header_name",
+                            "help": "The HTTP Header to set HTTP Header Value as.",
+                            "defaultValue": "Authorization",
+                            "options": {
+                                "display": false
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "label": "HTTP Header Value",
+                            "field": "http_header_value",
+                            "help": "Example: 'Bearer <token>' or your API Key Value",
+                            "encrypted": true,
+                            "options": {
+                                "display": false
+                            }
                         }
                     ],
                     "title": "TAXII Configurations"
@@ -149,7 +244,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.16.0+8a06ed7",
+        "version": "1.16.1+8029519",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [

@@ -40,7 +40,8 @@ MEDALLION_BACKEND_CONFIG = {
   }
 }
 
-TAXII_SERVER_REPO = "https://github.com/oasis-open/cti-taxii-server.git"
+# TODO: Since we are now using a fork of the original cti-taxii-server repo, we can remove some of the overrides
+TAXII_SERVER_REPO = "https://github.com/bliew-splunk/cti-taxii-server.git"
 DOCKER_COMPOSE_PROJECT_NAME = "test-medallion-taxii2-server"
 
 OVERRIDE_YAML = """
@@ -48,6 +49,8 @@ OVERRIDE_YAML = """
 services:
   medallion:
     command: [sh, -c, "medallion --host 0.0.0.0 --log-level=DEBUG --debug-mode"]
+    environment:
+      AUTH_TYPE: basic
 """
 
 @dataclass
@@ -107,8 +110,11 @@ def taxii2_server():
                                  "-f", str(repo_path / "docker-compose.yml"),
                                  "-f", str(repo_path / "docker-compose.override.yml"),
                                  "up", "--detach", "--wait", "--build"]
-        run_subprocess_and_log_output(docker_compose_up_cmd)
-
+        try:
+            run_subprocess_and_log_output(docker_compose_up_cmd)
+        except subprocess.CalledProcessError:
+            logger.exception("Error spinning up docker compose project")
+            run_subprocess_and_log_output(["docker", "compose", "--project-name", DOCKER_COMPOSE_PROJECT_NAME, "logs", "medallion"])
         run_subprocess_and_log_output(["docker", "compose", "--project-name", DOCKER_COMPOSE_PROJECT_NAME, "ps", "--all"])
 
         yield Taxii2ServerConnectionInfo(server_url=TAXII_SERVER_URL,
@@ -129,7 +135,7 @@ def taxii2_server_session(taxii2_server):
 
 @pytest.fixture(scope='module')
 def taxii2_server_is_reachable(taxii2_server_session, taxii2_server):
-    MAX_ATTEMPTS = 30
+    MAX_ATTEMPTS = 15
     POLL_INTERVAL_SECONDS = 2
     attempts = 0
     while attempts < MAX_ATTEMPTS:

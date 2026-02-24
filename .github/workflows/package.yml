@@ -98,11 +98,10 @@ jobs:
       - name: list
         run: pwd && ls -la
       - name: Run Splunk App-Inspect CLI Action
-        uses: splunk/appinspect-cli-action@v1
+        uses: splunk/appinspect-cli-action@v2.11.0
         with:
           app_path: ./ctis.tar.gz
           included_tags: cloud
-          expected_failure_markdown: .appinspect.expect.yaml
 
   integration-test:
     runs-on: ubuntu-22.04
@@ -142,7 +141,7 @@ jobs:
       - name: Install Pytest
         run: pip install pytest
       - name: Run integration tests
-        run: cd integration_test/test_rest_api && python -m pytest -v --durations=0
+        run: cd integration_test/test_rest_api && python -m pytest -s -vv --durations=0
         env:
           SPLUNK_USERNAME: admin
           SPLUNK_PASSWORD: ${{ secrets.SPLUNK_PASSWORD }}
