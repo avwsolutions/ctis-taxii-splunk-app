@@ -5,7 +5,7 @@ from solnlib import log
 import logging
 from const import ADDON_NAME_LOWER
 import requests
-from requests_auth import api_root_from_dict
+from taxii_util import api_root_from_dict
 
 logger = log.Logs().get_logger(f"{ADDON_NAME_LOWER}.{__name__}")
 logger.setLevel(logging.INFO)

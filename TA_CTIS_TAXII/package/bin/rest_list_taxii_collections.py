@@ -1,6 +1,6 @@
 from common import AbstractRestHandler
 import logging
-from requests_auth import api_root_from_dict
+from taxii_util import api_root_from_dict
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

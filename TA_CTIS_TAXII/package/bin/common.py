@@ -18,7 +18,7 @@ from models.kvstore_collections import CollectionName, KVStoreCollectionsContext
 from server_exception import ServerException
 from solnlib.log import Logs
 from solnlib.splunkenv import make_splunkhome_path
-from requests_auth import api_root_from_dict
+from taxii_util import api_root_from_dict
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
