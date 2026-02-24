@@ -1,7 +1,6 @@
 # Configuration
 
 ## Network Requirements
-Note that TAXII v2.1 runs over HTTPS and is secured with HTTP Basic Authentication.
 
 The TAXII server must be reachable from the Splunk instance, so please consider:
 
@@ -18,9 +17,11 @@ Navigate to the **Configuration** tab in the app.
 ![Configuration Page](img/configuration_first_time.png)
 
 Click on the **Add** button to add a new TAXII server configuration.
-![Dialog to add TAXII server](img/configuration_add_dialog.png)
+![Dialog to add TAXII server](img/configuration_add_dialog_v2.png)
 
 Clicking on **Add** will verify the connection to the TAXII server including network connectivity and authentication.
+
+HTTP Basic Authentication, API Key and Bearer Token authentication are supported.
 
 ## Notes
 Proxy server configuration and disabling TLS/SSL verification is not currently supported in this app.
