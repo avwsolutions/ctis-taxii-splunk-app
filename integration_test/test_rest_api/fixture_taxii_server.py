@@ -113,7 +113,7 @@ def taxii2_server():
         try:
             run_subprocess_and_log_output(docker_compose_up_cmd)
         except subprocess.CalledProcessError:
-            run_subprocess_and_log_output(["docker", "compose", "logs", "medallion"])
+            run_subprocess_and_log_output(["docker", "compose", "--project-name", DOCKER_COMPOSE_PROJECT_NAME, "logs", "medallion"])
         run_subprocess_and_log_output(["docker", "compose", "--project-name", DOCKER_COMPOSE_PROJECT_NAME, "ps", "--all"])
 
         yield Taxii2ServerConnectionInfo(server_url=TAXII_SERVER_URL,
