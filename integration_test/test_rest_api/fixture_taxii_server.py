@@ -49,6 +49,8 @@ OVERRIDE_YAML = """
 services:
   medallion:
     command: [sh, -c, "medallion --host 0.0.0.0 --log-level=DEBUG --debug-mode"]
+    environment:
+      AUTH_TYPE: basic
 """
 
 @dataclass
