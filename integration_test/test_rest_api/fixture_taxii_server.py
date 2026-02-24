@@ -135,7 +135,7 @@ def taxii2_server_session(taxii2_server):
 
 @pytest.fixture(scope='module')
 def taxii2_server_is_reachable(taxii2_server_session, taxii2_server):
-    MAX_ATTEMPTS = 30
+    MAX_ATTEMPTS = 15
     POLL_INTERVAL_SECONDS = 2
     attempts = 0
     while attempts < MAX_ATTEMPTS:
