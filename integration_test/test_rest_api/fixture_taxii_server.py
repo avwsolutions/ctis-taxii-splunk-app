@@ -40,7 +40,8 @@ MEDALLION_BACKEND_CONFIG = {
   }
 }
 
-TAXII_SERVER_REPO = "https://github.com/oasis-open/cti-taxii-server.git"
+# TODO: Since we are now using a fork of the original cti-taxii-server repo, we can remove some of the overrides
+TAXII_SERVER_REPO = "https://github.com/bliew-splunk/cti-taxii-server.git"
 DOCKER_COMPOSE_PROJECT_NAME = "test-medallion-taxii2-server"
 
 OVERRIDE_YAML = """
@@ -107,8 +108,10 @@ def taxii2_server():
                                  "-f", str(repo_path / "docker-compose.yml"),
                                  "-f", str(repo_path / "docker-compose.override.yml"),
                                  "up", "--detach", "--wait", "--build"]
-        run_subprocess_and_log_output(docker_compose_up_cmd)
-
+        try:
+            run_subprocess_and_log_output(docker_compose_up_cmd)
+        except subprocess.CalledProcessError:
+            run_subprocess_and_log_output(["docker", "compose", "logs", "medallion"])
         run_subprocess_and_log_output(["docker", "compose", "--project-name", DOCKER_COMPOSE_PROJECT_NAME, "ps", "--all"])
 
         yield Taxii2ServerConnectionInfo(server_url=TAXII_SERVER_URL,
