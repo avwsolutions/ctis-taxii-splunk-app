@@ -16,9 +16,11 @@ API_ROOT_URL = "api_root_url"
 def api_root_from_dict(config: dict) -> ApiRoot:
     api_root_url = config.get(API_ROOT_URL)
     auth_type = config.get("auth_type")
+
     if auth_type == 'basic':
         username = config.get("username")
         password = config.get("password")
+        assert username is not None and password is not None, "Username and password must be provided for basic authentication"
         return ApiRoot(url=api_root_url, user=username, password=password)
     elif auth_type == 'custom':
         http_header_name = config.get("http_header_name")

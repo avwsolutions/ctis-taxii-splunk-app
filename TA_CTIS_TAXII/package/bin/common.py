@@ -9,7 +9,7 @@ from typing import Dict, List, Optional
 from cattrs import ClassValidationError
 from solnlib._utils import get_collection_data
 from stix2 import Bundle
-from taxii2client.v21 import ApiRoot, Collection, _TAXIIEndpoint
+from taxii2client.v21 import Collection, _TAXIIEndpoint
 
 from const import ADDON_NAME, ADDON_NAME_LOWER
 from models import SubmissionStatus, \
@@ -100,7 +100,7 @@ class AbstractRestHandler(abc.ABC):
         input_payload = json.loads(payload_json)
         return input_payload
 
-    def get_taxii_config(self, session_key: str, stanza_name: str):
+    def get_taxii_config(self, session_key: str, stanza_name: str) -> dict:
         from solnlib import conf_manager
         conf_name = f"{ADDON_NAME_LOWER}_taxii_config"
         cfm = conf_manager.ConfManager(
@@ -110,7 +110,13 @@ class AbstractRestHandler(abc.ABC):
         )
         logger.info(f"Getting conf_file={conf_name} stanza={stanza_name}")
         taxii_config_conf = cfm.get_conf(conf_name)
-        return taxii_config_conf.get(stanza_name)
+        config = taxii_config_conf.get(stanza_name)
+        if 'auth_type' not in config:
+            # https://github.com/splunk/ctis-taxii-splunk-app/issues/83
+            # Make auth_type backwards compatible, assuming a default of 'basic' if not provided.
+            logger.info(f"No auth_type specified in config, defaulting to 'basic' for backwards compatibility")
+            config['auth_type'] = 'basic'
+        return config
 
     def get_taxii_collection(self, taxii_config: dict, collection_id: str) -> Collection:
         api_root = api_root_from_dict(config=taxii_config)
