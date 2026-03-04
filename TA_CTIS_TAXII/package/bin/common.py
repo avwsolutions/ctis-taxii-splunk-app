@@ -9,7 +9,7 @@ from typing import Dict, List, Optional
 from cattrs import ClassValidationError
 from solnlib._utils import get_collection_data
 from stix2 import Bundle
-from taxii2client.v21 import Collection, _TAXIIEndpoint
+from taxii2client.v21 import _TAXIIEndpoint
 
 from const import ADDON_NAME, ADDON_NAME_LOWER
 from models import SubmissionStatus, \
@@ -18,7 +18,7 @@ from models.kvstore_collections import CollectionName, KVStoreCollectionsContext
 from server_exception import ServerException
 from solnlib.log import Logs
 from solnlib.splunkenv import make_splunkhome_path
-from taxii_util import api_root_from_dict
+from taxii_util import collection_from_config, TaxiiConfig
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -67,6 +67,7 @@ def get_logger_for_script(script_filepath: str) -> logging.Logger:
     return app_logger
 
 
+# TODO: Move this to taxii_util.py?
 def add_request_response_logging_hook(taxii_endpoint: _TAXIIEndpoint, app_logger: logging.Logger):
     session = taxii_endpoint._conn.session
     def log_http_response(response, *args, **kwargs):
@@ -100,7 +101,7 @@ class AbstractRestHandler(abc.ABC):
         input_payload = json.loads(payload_json)
         return input_payload
 
-    def get_taxii_config(self, session_key: str, stanza_name: str) -> dict:
+    def get_taxii_config(self, session_key: str, stanza_name: str) -> TaxiiConfig:
         from solnlib import conf_manager
         conf_name = f"{ADDON_NAME_LOWER}_taxii_config"
         cfm = conf_manager.ConfManager(
@@ -111,21 +112,8 @@ class AbstractRestHandler(abc.ABC):
         logger.info(f"Getting conf_file={conf_name} stanza={stanza_name}")
         taxii_config_conf = cfm.get_conf(conf_name)
         config = taxii_config_conf.get(stanza_name)
-        if 'auth_type' not in config:
-            # https://github.com/splunk/ctis-taxii-splunk-app/issues/83
-            # Make auth_type backwards compatible, assuming a default of 'basic' if not provided.
-            logger.info(f"No auth_type specified in config, defaulting to 'basic' for backwards compatibility")
-            config['auth_type'] = 'basic'
-        return config
-
-    def get_taxii_collection(self, taxii_config: dict, collection_id: str) -> Collection:
-        # TODO: Change this to just instantiate a Collection with API root + collection_id. Skip the GET /collections request.
-        api_root = api_root_from_dict(config=taxii_config)
-
-        collection_id_to_collection = {c.id: c for c in api_root.collections}
-        if collection_id not in collection_id_to_collection:
-            raise ValueError(f"Collection ID {collection_id} not found in TAXII server.")
-        return collection_id_to_collection[collection_id]
+        taxii_config = TaxiiConfig.from_dict(config=config)
+        return taxii_config
 
     def submit_grouping(self, session_key: str, submission_id: str) -> dict:
         taxii_response_dict = None
@@ -140,7 +128,7 @@ class AbstractRestHandler(abc.ABC):
             taxii_collection_id = submission.collection_id
 
             logger.info(f"Submitting bundle={bundle_json} to TAXII collection: collection_id={taxii_collection_id}")
-            taxii_collection = self.get_taxii_collection(taxii_config=taxii_config, collection_id=taxii_collection_id)
+            taxii_collection = collection_from_config(taxii_config=taxii_config, collection_id=taxii_collection_id)
             taxii_response = taxii_collection.add_objects(bundle_json)
             taxii_response_dict = taxii_response._raw
             logger.info(f"taxii_response: {taxii_response_dict}")

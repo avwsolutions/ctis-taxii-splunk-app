@@ -54,18 +54,15 @@ class TokenAuth(AuthBase):
         return r
 
 
-def api_root_from_dict(config: dict) -> ApiRoot:
-    taxii_config = TaxiiConfig.from_dict(config)
+def api_root_from_config(taxii_config: TaxiiConfig) -> ApiRoot:
     return ApiRoot(url=taxii_config.api_root_url, **taxii_config.taxii_endpoint_auth_params())
 
 
-def collection_from_config_dict(config: dict, collection_id: Optional[str] = None) -> Collection:
-    taxii_config = TaxiiConfig.from_dict(config)
-    collection_id_to_use = collection_id or taxii_config.default_collection_id
-    assert collection_id_to_use is not None, "Collection id must be provided for collection creation"
+def collection_from_config(taxii_config: TaxiiConfig, collection_id: str) -> Collection:
+    assert collection_id is not None, "collection_id must be provided"
 
     base_url = taxii_config.api_root_url
     if not base_url.endswith("/"):
         base_url += "/"
-    endpoint_url = urljoin(base_url, f"collections/{collection_id_to_use}")
+    endpoint_url = urljoin(base_url, f"collections/{collection_id}")
     return Collection(endpoint_url, **taxii_config.taxii_endpoint_auth_params())
