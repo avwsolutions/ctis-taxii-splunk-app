@@ -160,6 +160,12 @@
                             "options": {
                                 "display": false
                             }
+                        },
+                        {
+                            "type": "text",
+                            "label": "Default Collection ID",
+                            "field": "default_collection_id",
+                            "help": "Optional, default collection used for submissions. Useful if credential does not have read access to perform GET /collections"
                         }
                     ],
                     "title": "TAXII Configurations"
@@ -244,7 +250,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.17.0+b2cc40b",
+        "version": "1.17.1+aa24be2",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [

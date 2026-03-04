@@ -119,6 +119,7 @@ class AbstractRestHandler(abc.ABC):
         return config
 
     def get_taxii_collection(self, taxii_config: dict, collection_id: str) -> Collection:
+        # TODO: Change this to just instantiate a Collection with API root + collection_id. Skip the GET /collections request.
         api_root = api_root_from_dict(config=taxii_config)
 
         collection_id_to_collection = {c.id: c for c in api_root.collections}
