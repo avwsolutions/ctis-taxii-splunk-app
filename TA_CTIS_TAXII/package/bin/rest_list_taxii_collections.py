@@ -1,4 +1,7 @@
+import requests
+
 from common import AbstractRestHandler
+from server_exception import RestResponseException
 import logging
 from taxii_util import api_root_from_config
 
@@ -14,5 +17,12 @@ class ListTaxiiCollectionsHandler(AbstractRestHandler):
         logger.info(f"config_name: {config_name}")
         taxii_config = self.get_taxii_config(session_key=session_key, stanza_name=config_name)
         api_root = api_root_from_config(taxii_config=taxii_config)
-        collections = api_root.collections
-        return {"collections": [x._raw for x in collections]}
+        try:
+            collections = api_root.collections
+            return {"collections": [x._raw for x in collections]}
+        except requests.exceptions.HTTPError as e:
+            logger.exception("Error listing TAXII collections")
+            raise RestResponseException(status_code=e.response.status_code, response={
+                "taxii_status_code": e.response.status_code,
+                "taxii_response": e.response.text
+            })

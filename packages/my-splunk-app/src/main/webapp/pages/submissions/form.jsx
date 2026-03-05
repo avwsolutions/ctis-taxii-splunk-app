@@ -24,6 +24,7 @@ import {urlForViewSubmission} from "@splunk/my-react-component/src/urls";
 import Message from "@splunk/react-ui/Message";
 import {PageHeading, PageHeadingContainer} from "@splunk/my-react-component/PageHeading";
 import P from "@splunk/react-ui/Paragraph";
+import {isEmpty, isString} from "lodash";
 import {GroupingId, ScheduledAt, TaxiiCollectionId, TaxiiConfigField} from "../../common/submission_form/fields";
 import {usePageTitle} from "../../common/utils";
 
@@ -53,12 +54,16 @@ function collectionToOption(collection) {
     }
 }
 
-function useTaxiiCollections({selectedTaxiiConfig}) {
+function useTaxiiCollections({selectedTaxiiConfig, defaultCollectionId}) {
     const [collectionOptions, setCollectionOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [warning, setWarning] = useState(null);
+
     useEffect(() => {
+        const defaultCollectionIdIsValid = isString(defaultCollectionId) && !isEmpty(defaultCollectionId);
         console.log("Selected TAXII Config:", selectedTaxiiConfig);
+        console.log("Default Collection ID:", defaultCollectionId);
         if (selectedTaxiiConfig) {
             setLoading(true);
             listTaxiiCollections({
@@ -74,12 +79,22 @@ function useTaxiiCollections({selectedTaxiiConfig}) {
                     const errMessage = `Error getting TAXII collections: ${errorText}`;
                     console.error(errMessage, errorResponse);
                     setLoading(false);
-                    setError(errMessage);
+                    if (defaultCollectionIdIsValid) {
+                        const fallbackOptions = [{
+                            label: `Default Collection (${defaultCollectionId})`,
+                            value: defaultCollectionId,
+                            disabled: false
+                        }];
+                        setCollectionOptions(fallbackOptions);
+                        setWarning(`Warning: ${errMessage}. Defaulting to default collection ID from config.`);
+                    }else{
+                        setError(errMessage);
+                    }
                 }
             }).then();
         }
-    }, [selectedTaxiiConfig]);
-    return {collectionOptions, loading, error};
+    }, [selectedTaxiiConfig, defaultCollectionId]);
+    return {collectionOptions, loading, error, warning};
 
 }
 
@@ -120,6 +135,7 @@ export function Form({groupingId}) {
         label: `${entry.name} (${entry.content.api_root_url})`,
         value: entry.name
     }));
+    const taxiiConfigNameToContent = Object.fromEntries(taxiiConfigEntries.map(entry => [entry.name, entry.content]))
 
     register(FIELD_GROUPING_ID, {required: 'Grouping ID is required'});
     register(FIELD_TAXII_CONFIG_NAME, {required: 'TAXII Config is required'});
@@ -146,13 +162,22 @@ export function Form({groupingId}) {
     });
 
     const selectedTaxiiConfig = watch(FIELD_TAXII_CONFIG_NAME);
+    const selectedTaxiiConfigContent = taxiiConfigNameToContent[selectedTaxiiConfig];
+    const defaultCollectionId = selectedTaxiiConfigContent?.default_collection_id;
+    const selectedDefaultCollectionId = isString(defaultCollectionId) && !isEmpty(defaultCollectionId) ? defaultCollectionId : null;
+
+    useEffect(() => {
+        setValue(FIELD_TAXII_COLLECTION_ID, selectedDefaultCollectionId, {shouldValidate: true});
+    }, [selectedDefaultCollectionId, setValue]);
+
     const {
         loading: collectionOptionsLoading,
         collectionOptions,
-        error: taxiiCollectionsError
-    } = useTaxiiCollections({selectedTaxiiConfig});
+        error: taxiiCollectionsError,
+        warning: taxiiCollectionsWarning
+    } = useTaxiiCollections({selectedTaxiiConfig, defaultCollectionId: selectedTaxiiConfigContent?.default_collection_id});
 
-    const error = groupingError || bundleError || taxiiConfigError || taxiiCollectionsError;
+    const error = groupingError || bundleError || taxiiConfigError;
 
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const submitButtonDisabled = useMemo(() => Object.keys(formState.errors).length > 0 || formState.isSubmitting || submitSuccess,
@@ -210,7 +235,7 @@ export function Form({groupingId}) {
                         <GroupingId fieldName={FIELD_GROUPING_ID}/>
                         <TaxiiConfigField fieldName={FIELD_TAXII_CONFIG_NAME} options={taxiiConfigOptions}/>
                         <TaxiiCollectionId loading={collectionOptionsLoading} disabled={selectedTaxiiConfig === null}
-                                           fieldName={FIELD_TAXII_COLLECTION_ID} options={collectionOptions}/>
+                                           fieldName={FIELD_TAXII_COLLECTION_ID} options={collectionOptions} error={taxiiCollectionsError} help={taxiiCollectionsWarning}/>
                         <CustomControlGroup label="Scheduled?">
                             <SwitchContainer>
                                 <Switch

@@ -15,7 +15,7 @@ from const import ADDON_NAME, ADDON_NAME_LOWER
 from models import SubmissionStatus, \
     bundle_for_grouping, serialize_stix_object, maximum_tlpv2_of_indicators
 from models.kvstore_collections import CollectionName, KVStoreCollectionsContext
-from server_exception import ServerException
+from server_exception import ServerException, RestResponseException
 from solnlib.log import Logs
 from solnlib.splunkenv import make_splunkhome_path
 from taxii_util import collection_from_config, TaxiiConfig
@@ -240,6 +240,9 @@ class AbstractRestHandler(abc.ABC):
         except ServerException as e:
             logger.exception(e)
             return {"payload": {"error": str(e), "errors": e.errors}, "status": 400}
+        except RestResponseException as e:
+            logger.exception(e)
+            return {"payload": e.response, "status": e.status_code}
         except ClassValidationError as e:
             logger.exception("Validation Error")
             return {"payload":
