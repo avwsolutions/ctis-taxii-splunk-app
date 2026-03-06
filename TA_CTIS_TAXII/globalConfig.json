@@ -160,6 +160,39 @@
                             "options": {
                                 "display": false
                             }
+                        },
+                        {
+                            "type": "checkbox",
+                            "label": "TAXII Collection Discovery",
+                            "field": "should_discover_collections",
+                            "defaultValue": true,
+                            "help": "Whether to perform collection discovery by making a GET request to /collections endpoint. If false, submissions will be made to the configured Default Collection ID.",
+                            "modifyFieldsOnValue": [
+                                {
+                                    "fieldValue": false,
+                                    "fieldsToModify": [
+                                        {
+                                            "fieldId": "default_collection_id",
+                                            "required": true
+                                        }
+                                    ]
+                                },
+                                {
+                                    "fieldValue": true,
+                                    "fieldsToModify": [
+                                        {
+                                            "fieldId": "default_collection_id",
+                                            "required": false
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "label": "Default Collection ID",
+                            "field": "default_collection_id",
+                            "help": "Default collection used for submissions. Required if TAXII Collection Discovery is disabled."
                         }
                     ],
                     "title": "TAXII Configurations"
@@ -244,7 +277,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.17.0+b2cc40b",
+        "version": "1.17.1+299797a",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [
