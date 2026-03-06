@@ -24,7 +24,7 @@ import {urlForViewSubmission} from "@splunk/my-react-component/src/urls";
 import Message from "@splunk/react-ui/Message";
 import {PageHeading, PageHeadingContainer} from "@splunk/my-react-component/PageHeading";
 import P from "@splunk/react-ui/Paragraph";
-import {isEmpty, isString} from "lodash";
+import {isString} from "lodash";
 import {GroupingId, ScheduledAt, TaxiiCollectionId, TaxiiConfigField} from "../../common/submission_form/fields";
 import {usePageTitle} from "../../common/utils";
 
@@ -32,6 +32,7 @@ const FIELD_TAXII_CONFIG_NAME = 'taxii_config_name';
 const FIELD_TAXII_COLLECTION_ID = 'taxii_collection_id';
 const FIELD_GROUPING_ID = 'grouping_id';
 const FIELD_SCHEDULED_AT = 'scheduled_at';
+const WARNING_TAXII_COLLECTION_DISCOVERY_DISABLED = "Warning: Collection Discovery is disabled for this configuration.";
 
 const StyledForm = styled.form`
     max-width: 1000px;
@@ -54,17 +55,16 @@ function collectionToOption(collection) {
     }
 }
 
-function useTaxiiCollections({selectedTaxiiConfig, defaultCollectionId}) {
+function useTaxiiCollectionsOptions({selectedTaxiiConfig, defaultCollectionId, shouldDiscoverCollections}) {
+    if(typeof shouldDiscoverCollections !== 'boolean'){
+        throw new Error("Expected shouldDiscoverCollections to be a boolean");
+    }
     const [collectionOptions, setCollectionOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [warning, setWarning] = useState(null);
-
     useEffect(() => {
-        const defaultCollectionIdIsValid = isString(defaultCollectionId) && !isEmpty(defaultCollectionId);
-        console.log("Selected TAXII Config:", selectedTaxiiConfig);
-        console.log("Default Collection ID:", defaultCollectionId);
-        if (selectedTaxiiConfig) {
+        console.log("Selected TAXII Config:", selectedTaxiiConfig, "Default Collection ID:", defaultCollectionId, "Should Discover Collections:", shouldDiscoverCollections);
+        if(selectedTaxiiConfig && shouldDiscoverCollections) {
             setLoading(true);
             listTaxiiCollections({
                 taxiiConfigName: selectedTaxiiConfig,
@@ -79,23 +79,27 @@ function useTaxiiCollections({selectedTaxiiConfig, defaultCollectionId}) {
                     const errMessage = `Error getting TAXII collections: ${errorText}`;
                     console.error(errMessage, errorResponse);
                     setLoading(false);
-                    if (defaultCollectionIdIsValid) {
-                        const fallbackOptions = [{
-                            label: `Default Collection (${defaultCollectionId})`,
-                            value: defaultCollectionId,
-                            disabled: false
-                        }];
-                        setCollectionOptions(fallbackOptions);
-                        setWarning(`Warning: ${errMessage}. Defaulting to default collection ID from config.`);
-                    }else{
-                        setError(errMessage);
-                    }
+                    setError(errMessage);
                 }
             }).then();
         }
-    }, [selectedTaxiiConfig, defaultCollectionId]);
-    return {collectionOptions, loading, error, warning};
+        if(!shouldDiscoverCollections && isString(defaultCollectionId)) {
+            setCollectionOptions([{
+                label: `Default Collection (${defaultCollectionId})`,
+                value: defaultCollectionId,
+                disabled: false
+            }]);
+        }
+    }, [selectedTaxiiConfig, defaultCollectionId, shouldDiscoverCollections]);
+    return {collectionOptions, loading, error};
+}
 
+function extractShouldDiscoverCollectionsFromConfig(taxiiConfigContent) {
+    if (taxiiConfigContent && "should_discover_collections" in taxiiConfigContent){
+        return taxiiConfigContent.should_discover_collections === '1';
+    }
+    // if should_discover_collections is not present, default to true for backwards compatibility
+    return true;
 }
 
 export function Form({groupingId}) {
@@ -163,19 +167,21 @@ export function Form({groupingId}) {
 
     const selectedTaxiiConfig = watch(FIELD_TAXII_CONFIG_NAME);
     const selectedTaxiiConfigContent = taxiiConfigNameToContent[selectedTaxiiConfig];
-    const defaultCollectionId = selectedTaxiiConfigContent?.default_collection_id;
-    const selectedDefaultCollectionId = isString(defaultCollectionId) && !isEmpty(defaultCollectionId) ? defaultCollectionId : null;
+    const shouldDiscoverTaxiiCollections = extractShouldDiscoverCollectionsFromConfig(selectedTaxiiConfigContent);
 
-    useEffect(() => {
-        setValue(FIELD_TAXII_COLLECTION_ID, selectedDefaultCollectionId, {shouldValidate: true});
-    }, [selectedDefaultCollectionId, setValue]);
+    const defaultCollectionId = selectedTaxiiConfigContent?.default_collection_id;
+    const selectedDefaultCollectionId = isString(defaultCollectionId) && defaultCollectionId !== "" ? defaultCollectionId : null;
+
 
     const {
         loading: collectionOptionsLoading,
         collectionOptions,
         error: taxiiCollectionsError,
-        warning: taxiiCollectionsWarning
-    } = useTaxiiCollections({selectedTaxiiConfig, defaultCollectionId: selectedTaxiiConfigContent?.default_collection_id});
+    } = useTaxiiCollectionsOptions({selectedTaxiiConfig, defaultCollectionId: selectedDefaultCollectionId, shouldDiscoverCollections: shouldDiscoverTaxiiCollections});
+
+    useEffect(() => {
+        setValue(FIELD_TAXII_COLLECTION_ID, selectedDefaultCollectionId, {shouldValidate: true});
+    }, [selectedDefaultCollectionId, collectionOptions, setValue]);
 
     const error = groupingError || bundleError || taxiiConfigError;
 
@@ -234,8 +240,9 @@ export function Form({groupingId}) {
                     <section>
                         <GroupingId fieldName={FIELD_GROUPING_ID}/>
                         <TaxiiConfigField fieldName={FIELD_TAXII_CONFIG_NAME} options={taxiiConfigOptions}/>
+                        {/* <Code language="json" value={JSON.stringify(selectedTaxiiConfigContent, null, 4)}/> */}
                         <TaxiiCollectionId loading={collectionOptionsLoading} disabled={selectedTaxiiConfig === null}
-                                           fieldName={FIELD_TAXII_COLLECTION_ID} options={collectionOptions} error={taxiiCollectionsError} help={taxiiCollectionsWarning}/>
+                                           fieldName={FIELD_TAXII_COLLECTION_ID} options={collectionOptions} error={taxiiCollectionsError} help={!shouldDiscoverTaxiiCollections ? WARNING_TAXII_COLLECTION_DISCOVERY_DISABLED : ""}/>
                         <CustomControlGroup label="Scheduled?">
                             <SwitchContainer>
                                 <Switch
