@@ -279,10 +279,8 @@ export function Form({groupingId}) {
                                                                                       disabled={selectedTaxiiConfig === null}
                                                                                       fieldName={FIELD_TAXII_COLLECTION_ID}
                                                                                       options={collectionOptions}
-                                                                                      error={taxiiCollectionsError}
-                                                                                      help={!shouldDiscoverTaxiiCollections ? WARNING_TAXII_COLLECTION_DISCOVERY_DISABLED : ""}/>
-                        }
-                        {!shouldDiscoverTaxiiCollections && <TaxiiCollectionIdText fieldName={FIELD_TAXII_COLLECTION_ID} />}
+                                                                                      error={taxiiCollectionsError}/>}
+                        {!shouldDiscoverTaxiiCollections && <TaxiiCollectionIdText fieldName={FIELD_TAXII_COLLECTION_ID}/>}
                         <CustomControlGroup label="Scheduled?">
                             <SwitchContainer>
                                 <Switch
