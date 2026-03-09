@@ -6,6 +6,7 @@ import {
     getStixBundleForGrouping,
     getTaxiiConfigs,
     listTaxiiCollections,
+    getTaxiiCollection,
     submitGrouping,
     useGetRecord
 } from "@splunk/my-react-component/src/ApiClient";
@@ -25,7 +26,8 @@ import Message from "@splunk/react-ui/Message";
 import {PageHeading, PageHeadingContainer} from "@splunk/my-react-component/PageHeading";
 import P from "@splunk/react-ui/Paragraph";
 import {isString} from "lodash";
-import {GroupingId, ScheduledAt, TaxiiCollectionId, TaxiiConfigField} from "../../common/submission_form/fields";
+import {useDebounce} from "@splunk/my-react-component/src/debounce";
+import {GroupingId, ScheduledAt, TaxiiCollectionIdDropdown, TaxiiConfigField, TaxiiCollectionIdText} from "../../common/submission_form/fields";
 import {usePageTitle} from "../../common/utils";
 
 const FIELD_TAXII_CONFIG_NAME = 'taxii_config_name';
@@ -115,7 +117,7 @@ export function Form({groupingId}) {
             [FIELD_SCHEDULED_AT]: null,
         }
     });
-    const {watch, register, trigger, handleSubmit, formState, setValue} = methods;
+    const {watch, register, trigger, handleSubmit, formState, setValue, clearErrors, setError} = methods;
 
     const {loading: loadingGrouping, error: groupingError} = useGetRecord({
         restGetFunction: getGrouping,
@@ -143,7 +145,11 @@ export function Form({groupingId}) {
 
     register(FIELD_GROUPING_ID, {required: 'Grouping ID is required'});
     register(FIELD_TAXII_CONFIG_NAME, {required: 'TAXII Config is required'});
-    register(FIELD_TAXII_COLLECTION_ID, {required: 'TAXII Collection is required'});
+    register(FIELD_TAXII_COLLECTION_ID, {
+        required: 'TAXII Collection is required'
+    });
+    const formCollectionId = watch(FIELD_TAXII_COLLECTION_ID);
+    const debouncedCollectionId = useDebounce(formCollectionId, 500);
 
     const [scheduledSubmission, setScheduledSubmission] = useState(false);
     const submitButtonLabel = scheduledSubmission ? "Schedule Submission" : "Submit Now";
@@ -226,6 +232,33 @@ export function Form({groupingId}) {
         }
     }, [scheduledSubmission, setValue]);
 
+    useEffect(() => {
+        console.log(`Collection ID: ${debouncedCollectionId}, Should Discover Collections: ${shouldDiscoverTaxiiCollections}`);
+        if(!shouldDiscoverTaxiiCollections && !debouncedCollectionId) {
+            setError(FIELD_TAXII_COLLECTION_ID, {message: 'TAXII Collection is required'});
+        }else if(!shouldDiscoverTaxiiCollections && debouncedCollectionId) {
+            getTaxiiCollection({
+                taxiiConfigName: selectedTaxiiConfig,
+                collectionId: debouncedCollectionId,
+                successHandler: (resp) => {
+                    console.log("Collection Info:", resp);
+                    if(resp?.can_write === true) {
+                        clearErrors(FIELD_TAXII_COLLECTION_ID);
+                    }else{
+                        setError(FIELD_TAXII_COLLECTION_ID, {message: `Credential does not have can_write permission on Collection ${debouncedCollectionId}`});
+                    }
+                },
+                errorHandler: async (errorResponse) => {
+                    const errMessage = `Error getting collection info for collection ${debouncedCollectionId}: ${errorResponse.status} ${errorResponse.statusText}`
+                    console.error(await errorResponse.text());
+                    setError(FIELD_TAXII_COLLECTION_ID, {message: errMessage});
+                }
+            }).then();
+        }else if(shouldDiscoverTaxiiCollections){
+            clearErrors(FIELD_TAXII_COLLECTION_ID);
+        }
+    }, [debouncedCollectionId, shouldDiscoverTaxiiCollections, selectedTaxiiConfig, clearErrors, setError]);
+
     return (
         <FormProvider {...methods}>
             <StyledForm name="SubmitGrouping" onSubmit={handleSubmit(onSubmit)}>
@@ -241,8 +274,15 @@ export function Form({groupingId}) {
                         <GroupingId fieldName={FIELD_GROUPING_ID}/>
                         <TaxiiConfigField fieldName={FIELD_TAXII_CONFIG_NAME} options={taxiiConfigOptions}/>
                         {/* <Code language="json" value={JSON.stringify(selectedTaxiiConfigContent, null, 4)}/> */}
-                        <TaxiiCollectionId loading={collectionOptionsLoading} disabled={selectedTaxiiConfig === null}
-                                           fieldName={FIELD_TAXII_COLLECTION_ID} options={collectionOptions} error={taxiiCollectionsError} help={!shouldDiscoverTaxiiCollections ? WARNING_TAXII_COLLECTION_DISCOVERY_DISABLED : ""}/>
+
+                        {shouldDiscoverTaxiiCollections && <TaxiiCollectionIdDropdown loading={collectionOptionsLoading}
+                                                                                      disabled={selectedTaxiiConfig === null}
+                                                                                      fieldName={FIELD_TAXII_COLLECTION_ID}
+                                                                                      options={collectionOptions}
+                                                                                      error={taxiiCollectionsError}
+                                                                                      help={!shouldDiscoverTaxiiCollections ? WARNING_TAXII_COLLECTION_DISCOVERY_DISABLED : ""}/>
+                        }
+                        {!shouldDiscoverTaxiiCollections && <TaxiiCollectionIdText fieldName={FIELD_TAXII_COLLECTION_ID} />}
                         <CustomControlGroup label="Scheduled?">
                             <SwitchContainer>
                                 <Switch

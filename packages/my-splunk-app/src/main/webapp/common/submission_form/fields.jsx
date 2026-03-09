@@ -18,13 +18,21 @@ TaxiiConfigField.propTypes = {
     options: PropTypes.array.isRequired
 }
 
-export function TaxiiCollectionId({fieldName, options, ...props}) {
+export function TaxiiCollectionIdDropdown({fieldName, options, ...props}) {
     return <SelectControlGroup label="TAXII Collection" {...useFormInputProps(fieldName)} options={options} {...props}/>
 }
 
-TaxiiCollectionId.propTypes = {
+TaxiiCollectionIdDropdown.propTypes = {
     fieldName: PropTypes.string.isRequired,
     options: PropTypes.array.isRequired
+}
+
+export function TaxiiCollectionIdText({fieldName, ...props}) {
+    return <TextControlGroup label="TAXII Collection" {...useFormInputProps(fieldName)} {...props}/>
+}
+
+TaxiiCollectionIdText.propTypes = {
+    fieldName: PropTypes.string.isRequired,
 }
 
 export function GroupingId({fieldName, ...props}) {
