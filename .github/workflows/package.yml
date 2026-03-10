@@ -26,7 +26,7 @@ jobs:
   unit-test:
     strategy:
       matrix:
-        python-version: [ "3.7", "3.9" ]
+        python-version: [ "3.9", "3.13" ]
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -110,9 +110,10 @@ jobs:
     strategy:
       matrix:
         splunk_version:
-          - 9.2
-          - 9.3
-          - 9.4
+          - '9.3'
+          - '9.4'
+          - '10.0'
+          - '10.2'
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js

@@ -47,13 +47,14 @@ docker run -d --rm --name splunk-ctis --hostname splunk-ctis \
   -p 4444:4444 \
   -e "SPLUNK_PASSWORD=$SPLUNK_PASSWORD" \
   -e 'SPLUNK_START_ARGS=--accept-license' \
+  -e 'SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com' \
   -v "$(pwd):/tmp/test" \
   -e "SPLUNK_APPS_URL=/tmp/test/$SPLUNK_APP_FILENAME" \
   -it splunk/splunk:"$splunk_version"
 
 
 function checkIfSplunkIsUp() {
-    if curl -k -u "admin:$SPLUNK_PASSWORD" 'https://localhost:8099/services/apps/local?output_mode=json' 2> /dev/null | jq ".entry[].name" | grep "$APP_NAME"; then
+    if curl -k -u "admin:$SPLUNK_PASSWORD" 'https://localhost:8099/services/apps/local?output_mode=json&count=0' 2> /dev/null | jq ".entry[].name" | grep "$APP_NAME"; then
         echo "App is installed"
         return 0
     else
@@ -79,25 +80,23 @@ function checkApiEndpoint() {
 echo "Time is now $(date)"
 printf "Waiting for Splunk to be up..."
 # TODO: wait for app to be installed and ready, because the docker image initially starts with no apps installed
-NUM_ATTEMPTS=5
-while true; do
-    for i in $(seq 1 $NUM_ATTEMPTS); do
-        if checkIfSplunkIsUp; then
-            echo
-            date
-            echo "Splunk is up and app is installed (Attempt $i)"
-            sleep 3
-        else
-            echo "Splunk is not up yet."
-            break
-        fi
-    done
-    if [ "$i" -eq "$NUM_ATTEMPTS" ]; then
-        echo "Splunk is confirmed up after $i attempts"
+NUM_ATTEMPTS=100
+for i in $(seq 1 $NUM_ATTEMPTS); do
+    if checkIfSplunkIsUp; then
+        echo
+        echo "$(date) Splunk is up and app is installed (Attempt $i)"
         break
+    else
+        printf "."
+        sleep 2
     fi
-    sleep 5
 done
+# if not up, then exit with error
+if ! checkIfSplunkIsUp; then
+    echo
+    echo "$(date) Splunk is not up after $NUM_ATTEMPTS attempts, exiting with error"
+    exit 1
+fi
 
 # Wait for one of our app's API endpoints to reachable
 # TODO: We might not need to check for the app installation above if we can just check for the API endpoint
