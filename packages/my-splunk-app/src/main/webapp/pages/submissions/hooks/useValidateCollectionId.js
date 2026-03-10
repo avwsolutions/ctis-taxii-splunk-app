@@ -8,7 +8,6 @@ export function useValidateCollectionId(collectionId, taxiiConfigName, enabled) 
     const [collectionMetadata, setCollectionMetadata] = useState(null);
 
     useEffect(() => {
-        setError(null);
         if(enabled && isString(collectionId) && collectionId !== ""){
             setLoading(true);
             getTaxiiCollection({
@@ -16,7 +15,9 @@ export function useValidateCollectionId(collectionId, taxiiConfigName, enabled) 
                 collectionId,
                 successHandler: (resp) => {
                     console.log("Collection metadata:", resp);
-                    if(resp?.can_write !== true) {
+                    if(resp?.can_write === true) {
+                        setError(null);
+                    }else{
                         setError(`Credential does not have can_write permission on Collection ${collectionId}`);
                     }
                     setCollectionMetadata(resp);
@@ -30,7 +31,9 @@ export function useValidateCollectionId(collectionId, taxiiConfigName, enabled) 
                 }
             }).then();
         }
-
+        if(!enabled){
+            setError(null);
+        }
     }, [enabled, collectionId, taxiiConfigName]);
 
     return {error, loading, collectionMetadata};

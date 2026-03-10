@@ -237,8 +237,8 @@ export function Form({groupingId}) {
         }
     }, [collectionValidationError, collectionValidationLoading, setError, clearErrors]);
 
-    const submitButtonDisabled = useMemo(() => Object.keys(formState.errors).length > 0 || collectionValidationLoading || formState.isSubmitting || submitSuccess,
-        [submitSuccess, formState, collectionValidationLoading]);
+    const submitButtonDisabled = useMemo(() => Object.keys(formState.errors).length > 0 || collectionValidationLoading || collectionOptionsLoading || formState.isSubmitting || submitSuccess,
+        [submitSuccess, formState, collectionValidationLoading, collectionOptionsLoading]);
 
     return (
         <FormProvider {...methods}>
