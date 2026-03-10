@@ -85,10 +85,10 @@ for i in $(seq 1 $NUM_ATTEMPTS); do
     if checkIfSplunkIsUp; then
         echo
         echo "$(date) Splunk is up and app is installed (Attempt $i)"
-        sleep 2
+        break
     else
         printf "."
-        break
+        sleep 2
     fi
 done
 # if not up, then exit with error
