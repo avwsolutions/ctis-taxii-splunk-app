@@ -56,16 +56,13 @@ function collectionToOption(collection) {
     }
 }
 
-function useTaxiiCollectionsOptions({selectedTaxiiConfig, defaultCollectionId, shouldDiscoverCollections}) {
-    if(typeof shouldDiscoverCollections !== 'boolean'){
-        throw new Error("Expected shouldDiscoverCollections to be a boolean");
-    }
+function useTaxiiCollectionsOptions({selectedTaxiiConfig}) {
     const [collectionOptions, setCollectionOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     useEffect(() => {
-        console.log("Selected TAXII Config:", selectedTaxiiConfig, "Default Collection ID:", defaultCollectionId, "Should Discover Collections:", shouldDiscoverCollections);
-        if(selectedTaxiiConfig && shouldDiscoverCollections) {
+        console.log("Selected TAXII Config:", selectedTaxiiConfig);
+        if(selectedTaxiiConfig) {
             setLoading(true);
             listTaxiiCollections({
                 taxiiConfigName: selectedTaxiiConfig,
@@ -84,14 +81,7 @@ function useTaxiiCollectionsOptions({selectedTaxiiConfig, defaultCollectionId, s
                 }
             }).then();
         }
-        if(!shouldDiscoverCollections && isString(defaultCollectionId)) {
-            setCollectionOptions([{
-                label: `Default Collection (${defaultCollectionId})`,
-                value: defaultCollectionId,
-                disabled: false
-            }]);
-        }
-    }, [selectedTaxiiConfig, defaultCollectionId, shouldDiscoverCollections]);
+    }, [selectedTaxiiConfig]);
     return {collectionOptions, loading, error};
 }
 
@@ -182,7 +172,7 @@ export function Form({groupingId}) {
         loading: collectionOptionsLoading,
         collectionOptions,
         error: taxiiCollectionsError,
-    } = useTaxiiCollectionsOptions({selectedTaxiiConfig, defaultCollectionId: selectedDefaultCollectionId, shouldDiscoverCollections: shouldDiscoverTaxiiCollections});
+    } = useTaxiiCollectionsOptions({selectedTaxiiConfig});
 
     useEffect(() => {
         setValue(FIELD_TAXII_COLLECTION_ID, selectedDefaultCollectionId, {shouldValidate: true});
