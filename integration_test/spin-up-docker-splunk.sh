@@ -54,7 +54,7 @@ docker run -d --rm --name splunk-ctis --hostname splunk-ctis \
 
 
 function checkIfSplunkIsUp() {
-    if curl -k -u "admin:$SPLUNK_PASSWORD" 'https://localhost:8099/services/apps/local?output_mode=json' 2> /dev/null | jq ".entry[].name" | grep "$APP_NAME"; then
+    if curl -k -u "admin:$SPLUNK_PASSWORD" 'https://localhost:8099/services/apps/local?output_mode=json&count=0' 2> /dev/null | jq ".entry[].name" | grep "$APP_NAME"; then
         echo "App is installed"
         return 0
     else
