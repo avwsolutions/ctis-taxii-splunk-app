@@ -277,7 +277,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.17.1+299797a",
+        "version": "1.18.0+c5266f1",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [

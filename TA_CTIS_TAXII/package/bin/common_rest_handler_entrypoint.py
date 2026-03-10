@@ -38,6 +38,8 @@ try:
     from rest_unschedule_submission import UnscheduleSubmissionHandler
     from rest_submit_grouping import SubmitGroupingHandler
     from rest_list_taxii_collections import ListTaxiiCollectionsHandler
+    from rest_get_taxii_collection import GetTaxiiCollectionHandler
+
 except ImportError as e:
     tb = traceback.format_exc()
     sys.stderr.write(f"Failed to import one or more REST handlers: {e} {tb}\n")

@@ -262,6 +262,17 @@ export function listTaxiiCollections({taxiiConfigName, successHandler, errorHand
     })
 }
 
+export function getTaxiiCollection({taxiiConfigName, collectionId, successHandler, errorHandler}) {
+    return getData({
+        endpoint: 'get-taxii-collection',
+        queryParams: {
+            config_name: taxiiConfigName,
+            collection_id: collectionId
+        },
+        successHandler, errorHandler
+    })
+}
+
 async function getAllRecords(endpoint, successHandler, errorHandler) {
     const allRecords = [];
     const pageSize = 100;
