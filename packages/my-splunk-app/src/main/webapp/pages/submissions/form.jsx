@@ -6,7 +6,6 @@ import {
     getStixBundleForGrouping,
     getTaxiiConfigs,
     listTaxiiCollections,
-    getTaxiiCollection,
     submitGrouping,
     useGetRecord
 } from "@splunk/my-react-component/src/ApiClient";
@@ -29,12 +28,12 @@ import {isString} from "lodash";
 import {useDebounce} from "@splunk/my-react-component/src/debounce";
 import {GroupingId, ScheduledAt, TaxiiCollectionIdDropdown, TaxiiConfigField, TaxiiCollectionIdText} from "../../common/submission_form/fields";
 import {usePageTitle} from "../../common/utils";
+import {useValidateCollectionId} from "./hooks/useValidateCollectionId";
 
 const FIELD_TAXII_CONFIG_NAME = 'taxii_config_name';
 const FIELD_TAXII_COLLECTION_ID = 'taxii_collection_id';
 const FIELD_GROUPING_ID = 'grouping_id';
 const FIELD_SCHEDULED_AT = 'scheduled_at';
-const WARNING_TAXII_COLLECTION_DISCOVERY_DISABLED = "Warning: Collection Discovery is disabled for this configuration.";
 
 const StyledForm = styled.form`
     max-width: 1000px;
@@ -149,7 +148,7 @@ export function Form({groupingId}) {
         required: 'TAXII Collection is required'
     });
     const formCollectionId = watch(FIELD_TAXII_COLLECTION_ID);
-    const debouncedCollectionId = useDebounce(formCollectionId, 500);
+    const debouncedCollectionId = useDebounce(formCollectionId, 300);
 
     const [scheduledSubmission, setScheduledSubmission] = useState(false);
     const submitButtonLabel = scheduledSubmission ? "Schedule Submission" : "Submit Now";
@@ -192,9 +191,6 @@ export function Form({groupingId}) {
     const error = groupingError || bundleError || taxiiConfigError;
 
     const [submitSuccess, setSubmitSuccess] = useState(false);
-    const submitButtonDisabled = useMemo(() => Object.keys(formState.errors).length > 0 || formState.isSubmitting || submitSuccess,
-        [submitSuccess, formState]);
-
     const [submissionError, setSubmissionError] = useState(null);
 
     const onSubmit = async (data) => {
@@ -232,32 +228,17 @@ export function Form({groupingId}) {
         }
     }, [scheduledSubmission, setValue]);
 
+    const {error: collectionValidationError, loading: collectionValidationLoading, collectionMetadata: loadedCollectionMetadata} = useValidateCollectionId(debouncedCollectionId, selectedTaxiiConfig, !shouldDiscoverTaxiiCollections);
     useEffect(() => {
-        console.log(`Collection ID: ${debouncedCollectionId}, Should Discover Collections: ${shouldDiscoverTaxiiCollections}`);
-        if(!shouldDiscoverTaxiiCollections && !debouncedCollectionId) {
-            setError(FIELD_TAXII_COLLECTION_ID, {message: 'TAXII Collection is required'});
-        }else if(!shouldDiscoverTaxiiCollections && debouncedCollectionId) {
-            getTaxiiCollection({
-                taxiiConfigName: selectedTaxiiConfig,
-                collectionId: debouncedCollectionId,
-                successHandler: (resp) => {
-                    console.log("Collection Info:", resp);
-                    if(resp?.can_write === true) {
-                        clearErrors(FIELD_TAXII_COLLECTION_ID);
-                    }else{
-                        setError(FIELD_TAXII_COLLECTION_ID, {message: `Credential does not have can_write permission on Collection ${debouncedCollectionId}`});
-                    }
-                },
-                errorHandler: async (errorResponse) => {
-                    const errMessage = `Error getting collection info for collection ${debouncedCollectionId}: ${errorResponse.status} ${errorResponse.statusText}`
-                    console.error(await errorResponse.text());
-                    setError(FIELD_TAXII_COLLECTION_ID, {message: errMessage});
-                }
-            }).then();
-        }else if(shouldDiscoverTaxiiCollections){
+        if(collectionValidationError) {
+            setError(FIELD_TAXII_COLLECTION_ID, {message: collectionValidationError});
+        }else{
             clearErrors(FIELD_TAXII_COLLECTION_ID);
         }
-    }, [debouncedCollectionId, shouldDiscoverTaxiiCollections, selectedTaxiiConfig, clearErrors, setError]);
+    }, [collectionValidationError, collectionValidationLoading, setError, clearErrors]);
+
+    const submitButtonDisabled = useMemo(() => Object.keys(formState.errors).length > 0 || collectionValidationLoading || formState.isSubmitting || submitSuccess,
+        [submitSuccess, formState, collectionValidationLoading]);
 
     return (
         <FormProvider {...methods}>
@@ -280,7 +261,9 @@ export function Form({groupingId}) {
                                                                                       fieldName={FIELD_TAXII_COLLECTION_ID}
                                                                                       options={collectionOptions}
                                                                                       error={taxiiCollectionsError}/>}
-                        {!shouldDiscoverTaxiiCollections && <TaxiiCollectionIdText fieldName={FIELD_TAXII_COLLECTION_ID}/>}
+                        {!shouldDiscoverTaxiiCollections && <TaxiiCollectionIdText fieldName={FIELD_TAXII_COLLECTION_ID}
+                                                                                   help={!collectionValidationError && !collectionValidationLoading && `Collection Title: ${loadedCollectionMetadata?.title}`}
+                        />}
                         <CustomControlGroup label="Scheduled?">
                             <SwitchContainer>
                                 <Switch
