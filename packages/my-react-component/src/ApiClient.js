@@ -242,6 +242,21 @@ export function getTaxiiConfigs({successHandler, errorHandler}) {
     })
 }
 
+export function getAdvancedSettings({successHandler, errorHandler}) {
+    return getData({
+        endpoint: 'TA_CTIS_TAXII_advanced_settings',
+        queryParams: {
+            output_mode: 'json',
+            count: 1
+        },
+        successHandler: (resp) => {
+            // Only a single Advanced Settings record is expected, so return the first one
+            return successHandler(resp?.entry[0]?.content);
+        },
+        errorHandler
+    })
+}
+
 export function getStixBundleForGrouping({groupingId, successHandler, errorHandler}) {
     return getData({
         endpoint: 'get-stix-bundle-for-grouping',
