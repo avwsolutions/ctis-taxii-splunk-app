@@ -12,7 +12,13 @@ After choosing an existing TAXII server configuration, you need to select a coll
 Note that collections which you do not have [write permission](https://docs.oasis-open.org/cti/taxii/v2.1/os/taxii-v2.1-os.html#_Toc31107540) for will be greyed out.
 ![Select a Collection](submission_img/submit_grouping_form_select_collection.png)
 
+
 ![Form Filled](submission_img/submit_grouping_taxii_details_filled.png)
+
+!!! warning "For TAXII Collection Discovery Disabled"
+
+    If you are using a TAXII Config which has 'TAXII Collection Discovery' disabled, then the 'TAXII Collection' field will be a textbox instead of a dropdown.
+    ![Submission page with TAXII Collection Discovery disabled](submission_img/submission_with_collection_discovery_disabled.png)
 
 If you would like to, you can preview the STIX Bundle JSON payload that will be submitted to the TAXII server.
 Click on the **Preview of STIX Bundle Payload** button to expand the preview.
