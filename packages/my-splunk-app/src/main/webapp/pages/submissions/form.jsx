@@ -7,7 +7,8 @@ import {
     getTaxiiConfigs,
     listTaxiiCollections,
     submitGrouping,
-    useGetRecord
+    useGetRecord,
+    getAdvancedSettings
 } from "@splunk/my-react-component/src/ApiClient";
 import Loader from "@splunk/my-react-component/src/Loader";
 import {FormProvider, useForm} from "react-hook-form";
@@ -124,7 +125,12 @@ export function Form({groupingId}) {
     });
     const bundleJsonString = JSON.stringify(bundle?.bundle, null, 4);
 
-    const loading = loadingGrouping || bundleLoading || loadingTaxiiConfigs;
+    const {loading: loadingAdvancedSettings, record: advancedSettings} = useGetRecord({
+        restGetFunction: getAdvancedSettings,
+        restFunctionQueryArgs: {}
+    });
+
+    const loading = loadingGrouping || bundleLoading || loadingTaxiiConfigs || loadingAdvancedSettings;
     const taxiiConfigEntries = taxiiConfig?.entry || [];
     const taxiiConfigOptions = taxiiConfigEntries.map(entry => ({
         label: `${entry.name} (${entry.content.api_root_url})`,
@@ -227,6 +233,15 @@ export function Form({groupingId}) {
         }
     }, [collectionValidationError, collectionValidationLoading, setError, clearErrors]);
 
+    useEffect(() => {
+        if(advancedSettings !== null) {
+            const defaultTaxiiConfigName = advancedSettings.default_taxii_config;
+            if(isString(defaultTaxiiConfigName) && defaultTaxiiConfigName !== "") {
+                setValue(FIELD_TAXII_CONFIG_NAME, defaultTaxiiConfigName, {shouldValidate: true});
+            }
+        }
+    }, [advancedSettings, setValue]);
+
     const submitButtonDisabled = useMemo(() => Object.keys(formState.errors).length > 0 || collectionValidationLoading || collectionOptionsLoading || formState.isSubmitting || submitSuccess,
         [submitSuccess, formState, collectionValidationLoading, collectionOptionsLoading]);
 
@@ -244,6 +259,7 @@ export function Form({groupingId}) {
                     <section>
                         <GroupingId fieldName={FIELD_GROUPING_ID}/>
                         <TaxiiConfigField fieldName={FIELD_TAXII_CONFIG_NAME} options={taxiiConfigOptions}/>
+                        {/* <Code language="json" value={JSON.stringify(advancedSettings, null, 4)}/> */}
                         {/* <Code language="json" value={JSON.stringify(selectedTaxiiConfigContent, null, 4)}/> */}
 
                         {shouldDiscoverTaxiiCollections && <TaxiiCollectionIdDropdown loading={collectionOptionsLoading}
