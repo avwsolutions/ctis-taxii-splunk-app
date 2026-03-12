@@ -233,7 +233,8 @@
                         {
                             "type": "singleSelect",
                             "label": "Proxy Type",
-                            "required": false,
+                            "required": true,
+                            "help": "Whether to use http:// or https:// for proxy url",
                             "options": {
                                 "disableSearch": true,
                                 "autoCompleteFields": [
@@ -387,7 +388,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.20.0+3a7d0bb",
+        "version": "1.20.0+85e37c0",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [

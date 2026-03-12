@@ -2,7 +2,10 @@ from splunktaucclib.rest_handler.admin_external import AdminExternalHandler
 from splunktaucclib.rest_handler.error import RestError
 
 from solnlib import log
+
 import logging
+
+from proxy_conf import ProxyConfiguration, get_proxy_configuration
 from const import ADDON_NAME_LOWER
 import requests
 from taxii_util import api_root_from_config, collection_from_config, TaxiiConfig
@@ -15,8 +18,8 @@ def get_public_ip_address() -> dict:
     resp.raise_for_status()
     return resp.json()
 
-def validate_with_list_collections(taxii_config: TaxiiConfig):
-    api_root = api_root_from_config(taxii_config=taxii_config)
+def validate_with_list_collections(taxii_config: TaxiiConfig, proxy_config: ProxyConfiguration = None):
+    api_root = api_root_from_config(taxii_config=taxii_config, proxy_config=proxy_config)
     logger.info(f"Validating connection to {api_root.url}")
     try:
         collections = api_root.collections
@@ -25,8 +28,8 @@ def validate_with_list_collections(taxii_config: TaxiiConfig):
         logger.exception(f"Connection to {api_root.url} failed: {e}")
         raise RestError(message=f"Connection to {api_root.url} failed: {e}", status=400)
 
-def validate_can_write_to_collection(taxii_config: TaxiiConfig):
-    collection = collection_from_config(taxii_config=taxii_config, collection_id=taxii_config.default_collection_id)
+def validate_can_write_to_collection(taxii_config: TaxiiConfig, proxy_config: ProxyConfiguration = None):
+    collection = collection_from_config(taxii_config=taxii_config, collection_id=taxii_config.default_collection_id, proxy_config=proxy_config)
     try:
         if not collection.can_write:
             raise RestError(message=f"Credentials provided do not have write permission to add objects to collection {collection.id}", status=400)
@@ -35,12 +38,15 @@ def validate_can_write_to_collection(taxii_config: TaxiiConfig):
         raise RestError(message=f"Request exception occurred: {e}", status=400)
 
 
-def validate_configuration(configuration: dict):
+def validate_configuration(configuration: dict, session_key:str):
     taxii_config = TaxiiConfig.from_dict(config=configuration)
+    proxy_config = get_proxy_configuration(session_key=session_key)
+
     if taxii_config.default_collection_id:
-        return validate_can_write_to_collection(taxii_config=taxii_config)
+        return validate_can_write_to_collection(taxii_config=taxii_config, proxy_config=proxy_config)
     else:
-        return validate_with_list_collections(taxii_config=taxii_config)
+        return validate_with_list_collections(taxii_config=taxii_config, proxy_config=proxy_config)
+
 
 class CustomConnectionValidator(AdminExternalHandler):
     def __init__(self, *args, **kwargs):
@@ -50,11 +56,11 @@ class CustomConnectionValidator(AdminExternalHandler):
         AdminExternalHandler.handleList(self, confInfo)
 
     def handleEdit(self, confInfo):
-        validate_configuration(configuration=self.payload)
+        validate_configuration(configuration=self.payload, session_key=self.getSessionKey())
         AdminExternalHandler.handleEdit(self, confInfo)
 
     def handleCreate(self, confInfo):
-        validate_configuration(configuration=self.payload)
+        validate_configuration(configuration=self.payload, session_key=self.getSessionKey())
         AdminExternalHandler.handleCreate(self, confInfo)
 
     def handleRemove(self, confInfo):
