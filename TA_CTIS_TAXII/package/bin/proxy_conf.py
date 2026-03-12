@@ -3,13 +3,12 @@ from dataclasses import dataclass
 from typing import Optional
 from urllib.parse import quote
 
-from solnlib import log
 from solnlib.conf_manager import ConfManager
 from solnlib.soln_exceptions import ConfManagerException
 
-from const import ADDON_NAME, ADDON_NAME_LOWER
+from const import ADDON_NAME
 
-logger = log.Logs().get_logger(f"{ADDON_NAME_LOWER}.{__name__}")
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 @dataclass

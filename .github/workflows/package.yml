@@ -42,6 +42,8 @@ jobs:
         run: pip install -r TA_CTIS_TAXII/package/lib/requirements.txt
       - name: Run unit tests
         run: python -m pytest -v TA_CTIS_TAXII/test/ --doctest-modules --junitxml=junit/test-results.xml --cov=TA_CTIS_TAXII/test/ --cov-report=xml --cov-report=html
+        env:
+          PYTHONPATH: TA_CTIS_TAXII/package/bin
   package:
     runs-on: ubuntu-22.04
     needs: [ unit-test ]
