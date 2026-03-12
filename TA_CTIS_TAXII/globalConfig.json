@@ -205,47 +205,7 @@
                             "alwaysDisplay": true
                         }
                     },
-                    "table": {
-                        "actions": [
-                            "edit",
-                            "delete"
-                        ],
-                        "header": [
-                            {
-                                "label": "Name",
-                                "field": "name"
-                            },
-                            {
-                                "label": "Default TAXII Config",
-                                "field": "default_taxii_config"
-                            }
-                        ]
-                    },
                     "entity": [
-                        {
-                            "type": "text",
-                            "label": "Name",
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "errorMsg": "Config Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
-                                    "pattern": "^[a-zA-Z]\\w*$"
-                                },
-                                {
-                                    "type": "string",
-                                    "errorMsg": "Length of name should be between 1 and 100",
-                                    "minLength": 1,
-                                    "maxLength": 100
-                                }
-                            ],
-                            "field": "name",
-                            "help": "A unique name for the config.",
-                            "required": true,
-                            "defaultValue": "advanced_settings",
-                            "options": {
-                                "display": false
-                            }
-                        },
                         {
                             "type": "singleSelect",
                             "label": "Default TAXII Configuration",
@@ -338,7 +298,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.19.0+3cea057",
+        "version": "1.20.0+0ea3092",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [
