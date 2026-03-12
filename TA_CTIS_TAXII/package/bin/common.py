@@ -19,6 +19,7 @@ from server_exception import ServerException, RestResponseException
 from solnlib.log import Logs
 from solnlib.splunkenv import make_splunkhome_path
 from taxii_util import collection_from_config, TaxiiConfig
+from proxy_conf import get_proxy_configuration
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -125,10 +126,11 @@ class AbstractRestHandler(abc.ABC):
             bundle_json = serialize_stix_object(stix_object=bundle)
 
             taxii_config = self.get_taxii_config(session_key=session_key, stanza_name=submission.taxii_config_name)
+            proxy_config = get_proxy_configuration(session_key=session_key)
             taxii_collection_id = submission.collection_id
 
             logger.info(f"Submitting bundle={bundle_json} to TAXII collection: collection_id={taxii_collection_id}")
-            taxii_collection = collection_from_config(taxii_config=taxii_config, collection_id=taxii_collection_id)
+            taxii_collection = collection_from_config(taxii_config=taxii_config, collection_id=taxii_collection_id, proxy_config=proxy_config)
             taxii_response = taxii_collection.add_objects(bundle_json)
             taxii_response_dict = taxii_response._raw
             logger.info(f"taxii_response: {taxii_response_dict}")
