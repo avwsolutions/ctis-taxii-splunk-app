@@ -244,7 +244,7 @@ export function getTaxiiConfigs({successHandler, errorHandler}) {
 
 export function getAdvancedSettings({successHandler, errorHandler}) {
     return getData({
-        endpoint: 'TA_CTIS_TAXII_advanced_settings',
+        endpoint: 'TA_CTIS_TAXII_settings/advanced_settings',
         queryParams: {
             output_mode: 'json',
             count: 1
