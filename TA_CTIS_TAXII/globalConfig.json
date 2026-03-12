@@ -220,6 +220,95 @@
                 },
                 {
                     "type": "loggingTab"
+                },
+                {
+                    "name": "custom_proxy",
+                    "title": "Proxy",
+                    "entity": [
+                        {
+                            "type": "checkbox",
+                            "label": "Enable",
+                            "field": "proxy_enabled"
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Proxy Type",
+                            "required": false,
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "http",
+                                        "label": "http"
+                                    },
+                                    {
+                                        "value": "https",
+                                        "label": "https"
+                                    }
+                                ]
+                            },
+                            "defaultValue": "http",
+                            "field": "proxy_type"
+                        },
+                        {
+                            "type": "text",
+                            "label": "Proxy Host",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Max host length is 4096",
+                                    "minLength": 1,
+                                    "maxLength": 4096
+                                }
+                            ],
+                            "help": "Example: myproxy.example.com",
+                            "field": "proxy_host",
+                            "required": true
+                        },
+                        {
+                            "label": "Proxy port",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1025,
+                                        65535
+                                    ],
+                                    "isInteger": true
+                                }
+                            ],
+                            "type": "text",
+                            "field": "proxy_port",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Proxy Username",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Max length of username is 255",
+                                    "minLength": 0,
+                                    "maxLength": 255
+                                }
+                            ],
+                            "field": "proxy_username"
+                        },
+                        {
+                            "label": "Proxy Password",
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Max length of password is 8192",
+                                    "minLength": 0,
+                                    "maxLength": 8192
+                                }
+                            ],
+                            "encrypted": true,
+                            "field": "proxy_password"
+                        }
+                    ]
                 }
             ],
             "title": "Configuration",
@@ -298,7 +387,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.20.0+0ea3092",
+        "version": "1.20.0+39d551f",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [
