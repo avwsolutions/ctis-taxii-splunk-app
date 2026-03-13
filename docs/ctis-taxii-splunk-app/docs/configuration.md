@@ -53,6 +53,12 @@ To configure this go to the 'Advanced Settings' tab.
 Choose an existing TAXII server configuration from the 'Default TAXII Configuration' dropdown and click 'Save'.
 ![Advanced Settings](img/advanced_settings.png)
 
+### Proxy Server
+Proxy server configuration is supported. TAXII server requests can be routed through a `http://` or `https://` proxy URL.
+To configure a proxy server, navigate to the 'Proxy' configuration tab.
+
+[//]: # (TODO: Add screenshot of proxy configuration page.)
+
 ## Notes
 Proxy server configuration and disabling TLS/SSL verification is not currently supported in this app.
 
