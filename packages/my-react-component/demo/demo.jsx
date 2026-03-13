@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { SplunkThemeProvider } from '@splunk/themes';
 import { getUserTheme, getThemeOptions } from '@splunk/splunk-utils/themes';
@@ -10,11 +10,11 @@ getUserTheme()
     .then((theme) => {
         const containerEl = document.getElementById('main-component-container');
         const splunkTheme = getThemeOptions(theme);
-        render(
+        const root = createRoot(containerEl);
+        root.render(
             <SplunkThemeProvider {...splunkTheme}>
                 <MyReactComponent name="World" />
-            </SplunkThemeProvider>,
-            containerEl
+            </SplunkThemeProvider>
         );
     })
     .catch((e) => {
