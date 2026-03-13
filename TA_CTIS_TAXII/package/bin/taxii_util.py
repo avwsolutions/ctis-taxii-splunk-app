@@ -5,6 +5,8 @@ from requests.auth import AuthBase
 from taxii2client.v21 import ApiRoot, Collection
 from dataclasses import dataclass
 
+from proxy_conf import ProxyConfiguration
+
 
 @dataclass
 class TaxiiConfig:
@@ -54,15 +56,22 @@ class TokenAuth(AuthBase):
         return r
 
 
-def api_root_from_config(taxii_config: TaxiiConfig) -> ApiRoot:
-    return ApiRoot(url=taxii_config.api_root_url, **taxii_config.taxii_endpoint_auth_params())
+def api_root_from_config(taxii_config: TaxiiConfig, proxy_config: ProxyConfiguration = None) -> ApiRoot:
+    proxies = None
+    if proxy_config is not None:
+        proxies = proxy_config.get_proxies_dict()
+    return ApiRoot(url=taxii_config.api_root_url, **taxii_config.taxii_endpoint_auth_params(), proxies=proxies)
 
 
-def collection_from_config(taxii_config: TaxiiConfig, collection_id: str) -> Collection:
+def collection_from_config(taxii_config: TaxiiConfig, collection_id: str, proxy_config: ProxyConfiguration = None) -> Collection:
     assert collection_id is not None, "collection_id must be provided"
 
     base_url = taxii_config.api_root_url
     if not base_url.endswith("/"):
         base_url += "/"
     endpoint_url = urljoin(base_url, f"collections/{collection_id}")
-    return Collection(endpoint_url, **taxii_config.taxii_endpoint_auth_params())
+
+    proxies = None
+    if proxy_config is not None:
+        proxies = proxy_config.get_proxies_dict()
+    return Collection(endpoint_url, **taxii_config.taxii_endpoint_auth_params(), proxies=proxies)

@@ -33,7 +33,7 @@ If you select 'API Key/Bearer Token' authentication, you will be prompted to ent
 Clicking on **Add** will verify the connection to the TAXII server including network connectivity and authentication.
 
 
-## Advanced Configuration
+## Additional Configuration
 
 ### Optional TAXII Configuration fields to configure
 
@@ -49,12 +49,19 @@ Authentication is verified by making a GET request to the TAXII server:
 You can configure a default TAXII server configuration which is used for submissions.
 
 To configure this go to the 'Advanced Settings' tab.
-If there is no existing configuration, press the 'Add' button. Otherwise, edit the existing configuration.
 
-![Advanced Settings Blank](img/configuration_advanced_settings_blank.png)
+Choose an existing TAXII server configuration from the 'Default TAXII Configuration' dropdown and click 'Save'.
+![Advanced Settings](img/advanced_settings.png)
 
-Choose an existing TAXII server configuration from the 'Default TAXII Configuration' dropdown and click 'Add' or 'Update'.
-![Advanced Settings Default TAXII](img/configuration_advanced_settings_default_taxii_config.png)
+### Proxy Server
+Proxy server configuration is supported. TAXII server requests can be routed through a `http://` or `https://` proxy URL.
+To configure a proxy server, navigate to the 'Proxy' configuration tab.
+
+**Use the 'Enable' checkbox to either enable or disable proxy usage for all TAXII server requests made by the app.**
+
+Username/password authentication is supported.
+
+![Proxy Config](img/configuration_proxy.png)
 
 ## Notes
 Proxy server configuration and disabling TLS/SSL verification is not currently supported in this app.

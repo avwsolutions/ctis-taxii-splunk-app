@@ -4,6 +4,7 @@ from common import AbstractRestHandler
 from server_exception import RestResponseException
 import logging
 from taxii_util import api_root_from_config
+from proxy_conf import get_proxy_configuration
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -16,7 +17,8 @@ class ListTaxiiCollectionsHandler(AbstractRestHandler):
         config_name = query_params.get("config_name")[0]
         logger.info(f"config_name: {config_name}")
         taxii_config = self.get_taxii_config(session_key=session_key, stanza_name=config_name)
-        api_root = api_root_from_config(taxii_config=taxii_config)
+        proxy_config = get_proxy_configuration(session_key=session_key)
+        api_root = api_root_from_config(taxii_config=taxii_config, proxy_config=proxy_config)
         try:
             collections = api_root.collections
             return {"collections": [x._raw for x in collections]}

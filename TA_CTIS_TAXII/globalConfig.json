@@ -205,47 +205,7 @@
                             "alwaysDisplay": true
                         }
                     },
-                    "table": {
-                        "actions": [
-                            "edit",
-                            "delete"
-                        ],
-                        "header": [
-                            {
-                                "label": "Name",
-                                "field": "name"
-                            },
-                            {
-                                "label": "Default TAXII Config",
-                                "field": "default_taxii_config"
-                            }
-                        ]
-                    },
                     "entity": [
-                        {
-                            "type": "text",
-                            "label": "Name",
-                            "validators": [
-                                {
-                                    "type": "regex",
-                                    "errorMsg": "Config Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
-                                    "pattern": "^[a-zA-Z]\\w*$"
-                                },
-                                {
-                                    "type": "string",
-                                    "errorMsg": "Length of name should be between 1 and 100",
-                                    "minLength": 1,
-                                    "maxLength": 100
-                                }
-                            ],
-                            "field": "name",
-                            "help": "A unique name for the config.",
-                            "required": true,
-                            "defaultValue": "advanced_settings",
-                            "options": {
-                                "display": false
-                            }
-                        },
                         {
                             "type": "singleSelect",
                             "label": "Default TAXII Configuration",
@@ -260,6 +220,96 @@
                 },
                 {
                     "type": "loggingTab"
+                },
+                {
+                    "name": "custom_proxy",
+                    "title": "Proxy",
+                    "entity": [
+                        {
+                            "type": "checkbox",
+                            "label": "Enable",
+                            "field": "proxy_enabled"
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Proxy Type",
+                            "required": true,
+                            "help": "Whether to use http:// or https:// for proxy url",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "http",
+                                        "label": "http"
+                                    },
+                                    {
+                                        "value": "https",
+                                        "label": "https"
+                                    }
+                                ]
+                            },
+                            "defaultValue": "http",
+                            "field": "proxy_type"
+                        },
+                        {
+                            "type": "text",
+                            "label": "Proxy Host",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Max host length is 4096",
+                                    "minLength": 1,
+                                    "maxLength": 4096
+                                }
+                            ],
+                            "help": "Example: myproxy.example.com",
+                            "field": "proxy_host",
+                            "required": true
+                        },
+                        {
+                            "label": "Proxy port",
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1025,
+                                        65535
+                                    ],
+                                    "isInteger": true
+                                }
+                            ],
+                            "type": "text",
+                            "field": "proxy_port",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Proxy Username",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Max length of username is 255",
+                                    "minLength": 0,
+                                    "maxLength": 255
+                                }
+                            ],
+                            "field": "proxy_username"
+                        },
+                        {
+                            "label": "Proxy Password",
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Max length of password is 8192",
+                                    "minLength": 0,
+                                    "maxLength": 8192
+                                }
+                            ],
+                            "encrypted": true,
+                            "field": "proxy_password"
+                        }
+                    ]
                 }
             ],
             "title": "Configuration",
@@ -338,7 +388,7 @@
     "meta": {
         "name": "TA_CTIS_TAXII",
         "restRoot": "TA_CTIS_TAXII",
-        "version": "1.19.0+3cea057",
+        "version": "1.20.0+a6c31cc",
         "displayName": "CTIS TAXII App",
         "schemaVersion": "0.0.9",
         "supportedThemes": [
