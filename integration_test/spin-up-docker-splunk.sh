@@ -87,7 +87,7 @@ for i in $(seq 1 $NUM_ATTEMPTS); do
         echo "$(date) Splunk is up and app is installed (Attempt $i)"
         break
     else
-        printf "."
+        echo "$(date) Splunk is not up yet or app is not installed, trying again in 2 seconds..."
         sleep 2
     fi
 done
@@ -100,12 +100,17 @@ fi
 
 # Wait for one of our app's API endpoints to reachable
 # TODO: We might not need to check for the app installation above if we can just check for the API endpoint
-while true; do
+for i in $(seq 1 $NUM_ATTEMPTS); do
     if checkApiEndpoint; then
-        echo "API endpoint is up"
+        echo "$(date) API endpoint is up"
         break
     else
-        echo "API endpoint is not up yet."
-        sleep 5
+        echo "$(date) API endpoint is not up yet."
+        sleep 1
     fi
 done
+
+if ! checkApiEndpoint; then
+    echo "$(date) API endpoint is not up after $NUM_ATTEMPTS attempts, exiting with error"
+    exit 1
+fi

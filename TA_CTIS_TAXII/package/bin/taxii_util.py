@@ -5,7 +5,7 @@ from requests.auth import AuthBase
 from taxii2client.v21 import ApiRoot, Collection
 from dataclasses import dataclass
 
-from .proxy_conf import ProxyConfiguration
+from proxy_conf import ProxyConfiguration
 
 
 @dataclass

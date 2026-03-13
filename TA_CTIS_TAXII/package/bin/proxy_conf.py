@@ -6,7 +6,7 @@ from urllib.parse import quote
 from solnlib.conf_manager import ConfManager
 from solnlib.soln_exceptions import ConfManagerException
 
-from .const import ADDON_NAME
+from const import ADDON_NAME
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
