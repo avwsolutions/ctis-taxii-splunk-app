@@ -1703,7 +1703,7 @@
     tinycolor2 "^1.4.1"
     use-typed-event-listener "^3.0.0"
 
-"@splunk/react-ui@^5.8.0":
+"@splunk/react-ui@^5.8.0", "@splunk/react-ui@^5.9.0":
   version "5.9.0"
   resolved "https://registry.yarnpkg.com/@splunk/react-ui/-/react-ui-5.9.0.tgz#a9e95f10b6c8438a47a7a9b05bdcc49ca4ab58ee"
   integrity sha512-SWpIfBRk+eyfn5fYBx7es/bIkU5iBQF/LSQI5CfKgHgkYfBkAXiu92Vw7syeCA4hOwUGB2TxXK5fhHRc8tmoYw==
@@ -1736,7 +1736,7 @@
     lodash "^4.17.14"
     rxjs "^5.4.2"
 
-"@splunk/splunk-utils@^3.0.0", "@splunk/splunk-utils@^3.0.1", "@splunk/splunk-utils@^3.1.0":
+"@splunk/splunk-utils@^3.0.0", "@splunk/splunk-utils@^3.1.0":
   version "3.1.0"
   resolved "https://registry.npmjs.org/@splunk/splunk-utils/-/splunk-utils-3.1.0.tgz"
   integrity sha512-x4OSnnr5VG23uMtg8HNVU0SYKVQXEdQskLbnBgDchLNkcc5NuuWIKWd6C11BVQiOqtY8r5i6/qjU/VG/U98Atg==

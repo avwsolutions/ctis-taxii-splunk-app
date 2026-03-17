@@ -37,10 +37,10 @@ const LargeText = styled.span`
 
 function ExpandedDataRecord({mapping}) {
     return (<Table>
-        <TableHead>
-            <TableHeadCell width={200}></TableHeadCell>
-            <TableHeadCell></TableHeadCell>
-        </TableHead>
+        <Table.Head>
+            <Table.HeadCell></Table.HeadCell>
+            <Table.HeadCell></Table.HeadCell>
+        </Table.Head>
         <Table.Body>
             {Object.entries(mapping).map(([term, description]) => (
                 <TableRow key={term}>

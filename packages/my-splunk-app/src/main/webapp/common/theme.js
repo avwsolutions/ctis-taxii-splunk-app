@@ -1,4 +1,4 @@
-import layout from "@splunk/react-page";
+import layout from "@splunk/react-page/18";
 import {getUserTheme} from "@splunk/splunk-utils/themes";
 
 // https://dev.splunk.com/enterprise/docs/developapps/createapps/buildapps/adduithemes/
