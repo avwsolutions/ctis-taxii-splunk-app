@@ -2,6 +2,13 @@ import styled from "styled-components";
 import Button from "@splunk/react-ui/Button";
 import {variables} from "@splunk/themes";
 
+function appearanceToForegroundColor(appearance) {
+    if(appearance === "secondary"){
+        return variables.actionColorContentSecondary;
+    }
+    return variables.white;
+}
+
 function appearanceToBackgroundColor(appearance) {
     if(appearance === "destructive"){
         return variables.actionColorBackgroundDestructive;
@@ -31,7 +38,7 @@ export const StyledButton = styled(Button)`
     border-color: ${props => (props.borderColor ?? undefined)};
 
     background-color: ${props => appearanceToBackgroundColor(props?.appearance)} !important;
-    color: ${variables.white} !important;
+    color: ${props => appearanceToForegroundColor(props?.appearance)} !important;
 
 
     &:hover {
