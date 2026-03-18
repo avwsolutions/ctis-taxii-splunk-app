@@ -34,7 +34,7 @@
     "@splunk/react-ui": "^5.9.0",
     "@splunk/splunk-utils": "^3.4.0",
     "@splunk/stylelint-config": "^4.0.0",
-    "@splunk/themes": "^1.5.0",
+    "@splunk/themes": "^1.6.0",
     "@splunk/webpack-configs": "^7.0.2",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.3.0",
