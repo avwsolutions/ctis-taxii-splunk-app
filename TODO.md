@@ -95,7 +95,7 @@
     - What about breaking changes?
 
 ### Upgrade to React 18 & @splunk/react-ui 5.X.X
-- [ ] Fix styling for 'Last Updated' search filter when 'Between Dates' is selected.
+- [X] Fix styling for 'Last Updated' search filter when 'Between Dates' is selected.
 - [ ] Fix styling for data table expanded row content:
   - Hide table header
   - Content should span entire width of outer table
