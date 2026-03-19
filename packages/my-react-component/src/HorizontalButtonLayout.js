@@ -9,5 +9,6 @@ export const HorizontalButtonLayout = styled.div`
     width: 100%;
 `
 export const HorizontalActionButtonLayout = styled(HorizontalButtonLayout)`
+    padding: 8px;
     gap: ${variables.spacingXSmall};
 `;
