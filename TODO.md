@@ -105,5 +105,5 @@
   - text line spacing
   - headings font size
   - spacing between buttons, e.g. on groupings form
-- [ ] Style disabled action buttons:
+- [X] Style disabled action buttons:
   - E.g. disable 'Submit Grouping' for a grouping with zero indicators 

@@ -1,24 +1,30 @@
 import styled from "styled-components";
 import Button from "@splunk/react-ui/Button";
-import {variables} from "@splunk/themes";
+import {variables, pick} from "@splunk/themes";
 
-function appearanceToForegroundColor(props) {
+function getForegroundColor(props) {
     const {appearance, disabled} = props;
     if (disabled) {
         if (appearance === "secondary") {
             return variables.actionColorContentSecondaryDisabled;
         }
-        return variables.actionColorContentPrimaryDisabled;
+        return pick({
+            light: variables.actionColorContentPrimaryDisabled,
+            dark: variables.actionColorContentSecondaryDisabled,
+        })
 
     }
     if (appearance === "secondary") {
         return variables.actionColorContentSecondary;
     }
-    return variables.actionColorContentPrimary;
+    return pick({
+        light: variables.actionColorContentPrimary,
+        dark: variables.actionColorContentSecondary,
+    })
 
 }
 
-function appearanceToBackgroundColor(props) {
+function getBackgroundColor(props) {
     const {appearance, disabled} = props;
     if (disabled) {
         if (appearance === "destructive") {
@@ -40,7 +46,7 @@ function appearanceToBackgroundColor(props) {
 
 }
 
-function appearanceToHoverBackgroundColor(props) {
+function getHoverBackgroundColor(props) {
     const {appearance, disabled} = props;
     if (disabled) {
         if (appearance === "destructive") {
@@ -67,11 +73,11 @@ export const StyledButton = styled(Button)`
     border-width: ${props => (props.noBorder ? 0 : undefined)};
     border-color: ${props => (props.borderColor ?? variables.borderColor)};
 
-    background-color: ${props => appearanceToBackgroundColor(props)} !important;
-    color: ${props => appearanceToForegroundColor(props)} !important;
+    background-color: ${props => getBackgroundColor(props)} !important;
+    color: ${props => getForegroundColor(props)} !important;
 
 
     &:hover {
-        background-color: ${props => appearanceToHoverBackgroundColor(props)} !important;
+        background-color: ${props => getHoverBackgroundColor(props)} !important;
     }
 `;
