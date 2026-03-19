@@ -43,7 +43,7 @@ export function SubmissionCard({submission}) {
             </HeaderContent>
         </Card.Header>
         <Card.Body>
-            <DL termWidth={200}>
+            <DL termWidth="200px">
                 <DL.Term>TAXII Config</DL.Term>
                 <DL.Description>{submission.taxii_config_name}</DL.Description>
                 <DL.Term>TAXII Collection</DL.Term>

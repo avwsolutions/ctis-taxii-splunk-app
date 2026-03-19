@@ -97,11 +97,11 @@
 ### Upgrade to React 18 & @splunk/react-ui 5.X.X
 - [X] Fix styling for 'Last Updated' search filter when 'Between Dates' is selected.
 - [ ] Fix styling for data table expanded row content:
-  - Hide table header
-  - Content should span entire width of outer table
-  - List groupings: submission card: spacing of field name and value needs to be fixed
-  - List submissions: expanding JSON or response is broken
-- [ ] Fix all forms' styling:
+  - [ ] Hide table header
+  - [ ] Content should span entire width of outer table
+  - [X] List groupings: submission card: spacing of field name and value needs to be fixed
+  - [ ] List submissions: expanding JSON or response is broken
+- [X] Fix all forms' styling:
   - text line spacing
   - headings font size
   - spacing between buttons, e.g. on groupings form
