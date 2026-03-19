@@ -4,7 +4,7 @@
 - [X] Logging: https://dev.splunk.com/enterprise/docs/developapps/addsupport/logging/loggingsplunkextensions
 - [X] Read from kvstore collection
 - [X] Write to kvstore collection
-- [ ] Read config saved by UCC
+- [X] Read config saved by UCC
 
 ### Misc
 - [X] Rename app package (without the '2')
@@ -93,3 +93,15 @@
     - I'm thinking that we use a scheduled search that runs frequently to check for records using old schema version
     - Have some script to convert the old schema to the new schema (if possible)
     - What about breaking changes?
+
+### Upgrade to React 18 & @splunk/react-ui 5.X.X
+- [ ] Fix styling for 'Last Updated' search filter when 'Between Dates' is selected.
+- [ ] Fix styling for data table expanded row content:
+  - Hide table header
+  - Content should span entire width of outer table
+  - List groupings: submission card: spacing of field name and value needs to be fixed
+  - List submissions: expanding JSON or response is broken
+- [ ] Fix all forms' styling:
+  - text line spacing
+  - headings font size
+  - spacing between buttons, e.g. on groupings form
