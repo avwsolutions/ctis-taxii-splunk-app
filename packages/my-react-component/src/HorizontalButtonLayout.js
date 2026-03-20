@@ -5,9 +5,10 @@ export const HorizontalButtonLayout = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: ${props => props.justifyContent || "flex-end"};
-    gap: ${props => (props.gap ?? 0)};
+    gap: ${props => (props.gap ?? variables.spacingXSmall)};
     width: 100%;
 `
 export const HorizontalActionButtonLayout = styled(HorizontalButtonLayout)`
+    padding: ${variables.spacingXSmall};
     gap: ${variables.spacingXSmall};
 `;

@@ -87,7 +87,7 @@ export function Form({existingIdentity}) {
         <FormProvider {...methods}>
             <MyForm onSubmit={handleSubmit(onSubmit)}>
                 <PageHeadingContainer>
-                    <PageHeading>{title}</PageHeading>
+                    <PageHeading level={1}>{title}</PageHeading>
                 </PageHeadingContainer>
                 <section>
                     {submissionError && <Message appearance="fill" type="error">

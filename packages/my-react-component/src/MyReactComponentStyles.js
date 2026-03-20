@@ -5,11 +5,11 @@ const StyledContainer = styled.div`
     ${mixins.reset('inline-block')};
     font-size: ${variables.fontSizeLarge};
     line-height: 200%;
-    margin: ${variables.spacing} ${variables.spacingHalf};
-    padding: ${variables.spacing} ${variables.spacingXXLarge};
+    margin: 20px;
+    padding: 20px;
     border-radius: ${variables.borderRadius};
     box-shadow: ${variables.overlayShadow};
-    background-color: ${variables.backgroundColor};
+    background-color: ${variables.backgroundColorPage};
 `;
 
 const StyledGreeting = styled.div`

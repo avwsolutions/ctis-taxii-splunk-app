@@ -161,8 +161,10 @@ export default function Submission({debugMode=false}) {
                 />
                 <Modal.Body>
                     <P>To submit to TAXII server, proceed to submit the Grouping.</P>
-                    <GotoIndicatorsPageButton/>
-                    <SubmitGroupingButton groupingId={groupingId}/>
+                    <HorizontalButtonLayout>
+                        <GotoIndicatorsPageButton/>
+                        <SubmitGroupingButton groupingId={groupingId}/>
+                    </HorizontalButtonLayout>
                 </Modal.Body>
             </Modal>
             {debugMode && <div>

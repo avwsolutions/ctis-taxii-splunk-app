@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import moment from "moment/moment";
 import React, {useEffect, useState} from "react";
-import {dateToIsoStringWithoutTimezone} from "./date_utils";
 import {without} from "lodash";
 import Dropdown from "@splunk/react-ui/Dropdown";
 import RadioList from "@splunk/react-ui/RadioList";
-import {DatetimeInput} from "./DateTimeControlGroup";
 import Button from "@splunk/react-ui/Button";
+import {DatetimeInput} from "./DateTimeControlGroup";
+import {dateToIsoStringWithoutTimezone} from "./date_utils";
 
 const DateRangeLayout = styled.div`
     display: flex;
@@ -99,7 +99,6 @@ export function DatetimeRangePicker({
 
     const closeReasons = without(Dropdown.possibleCloseReasons, 'contentClick');
     const [selected, setSelected] = React.useState(optional ? SELECTION_NOT_APPLIED : SELECTION_ANY);
-    const showDateRange = selected === SELECTION_DATE_RANGE;
     const {startDateIsoString, endDateIsoString, handleStartDateChange, handleEndDateChange} = useDateRangePicker();
     const [query, setQuery] = React.useState(queryBasedOnSelection(selected, startDateIsoString, endDateIsoString));
 
@@ -131,12 +130,13 @@ export function DatetimeRangePicker({
                 <RadioList.Option value={SELECTION_LAST_24_HOURS}>{SELECTION_LAST_24_HOURS}</RadioList.Option>
                 <RadioList.Option value={SELECTION_LAST_7_DAYS}>{SELECTION_LAST_7_DAYS}</RadioList.Option>
                 <RadioList.Option value={SELECTION_LAST_30_DAYS}>{SELECTION_LAST_30_DAYS}</RadioList.Option>
-                <RadioList.Option value={SELECTION_DATE_RANGE}>{SELECTION_DATE_RANGE}</RadioList.Option>
-                {showDateRange && <DateRangeLayout>
-                    <DatetimeInput type="datetime-local" value={startDateIsoString} onChange={handleStartDateChange}/>
-                    <span>and</span>
-                    <DatetimeInput type="datetime-local" value={endDateIsoString} onChange={handleEndDateChange}/>
-                </DateRangeLayout>}
+                <RadioList.Option value={SELECTION_DATE_RANGE} description={
+                    <DateRangeLayout>
+                        <DatetimeInput type="datetime-local" value={startDateIsoString} onChange={handleStartDateChange}/>
+                        <span>and</span>
+                        <DatetimeInput type="datetime-local" value={endDateIsoString} onChange={handleEndDateChange}/>
+                    </DateRangeLayout>
+                }>{SELECTION_DATE_RANGE}</RadioList.Option>
             </RadioList>
         </div>
     </StyledDropdown>);
