@@ -1,10 +1,16 @@
 # CTIS TAXII ES Integration - TODO
 
+## Maintenance
+- [ ] Upgrade from React 16 to 18
+  - Create new Splunk UI project with https://splunkui.splunk.com/Packages/create/Overview (uses React 18)
+  - Replace existing `packages/`
+  - Test to ensure that themes are correctly applied (light and dark)
+
 ### Unknowns
 - [X] Logging: https://dev.splunk.com/enterprise/docs/developapps/addsupport/logging/loggingsplunkextensions
 - [X] Read from kvstore collection
 - [X] Write to kvstore collection
-- [X] Read config saved by UCC
+- [ ] Read config saved by UCC
 
 ### Misc
 - [X] Rename app package (without the '2')
@@ -93,17 +99,3 @@
     - I'm thinking that we use a scheduled search that runs frequently to check for records using old schema version
     - Have some script to convert the old schema to the new schema (if possible)
     - What about breaking changes?
-
-### Upgrade to React 18 & @splunk/react-ui 5.X.X
-- [X] Fix styling for 'Last Updated' search filter when 'Between Dates' is selected.
-- [X] Fix styling for data table expanded row content:
-  - [X] Hide table header
-  - [X] Content should span entire width of outer table
-  - [X] List groupings: submission card: spacing of field name and value needs to be fixed
-  - [X] List submissions: expanding JSON or response is broken
-- [X] Fix all forms' styling:
-  - text line spacing
-  - headings font size
-  - spacing between buttons, e.g. on groupings form
-- [X] Style disabled action buttons:
-  - E.g. disable 'Submit Grouping' for a grouping with zero indicators 

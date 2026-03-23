@@ -1,25 +1,24 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { render } from 'react-dom';
 
 import { SplunkThemeProvider } from '@splunk/themes';
+import { getUserTheme, getThemeOptions } from '@splunk/splunk-utils/themes';
 
 import MyReactComponent from '../src/MyReactComponent';
 
-const containerEl = document.getElementById('main-component-container');
-const root = createRoot(containerEl);
-root.render(
-    <>
-        <SplunkThemeProvider colorScheme="dark" family="prisma">
-            <MyReactComponent/>
-        </SplunkThemeProvider>
-        <SplunkThemeProvider colorScheme="light" family="prisma">
-            <MyReactComponent/>
-        </SplunkThemeProvider>
-        <SplunkThemeProvider colorScheme="dark" family="enterprise">
-            <MyReactComponent/>
-        </SplunkThemeProvider>
-        <SplunkThemeProvider colorScheme="light" family="enterprise">
-            <MyReactComponent/>
-        </SplunkThemeProvider>
-    </>
-);
+getUserTheme()
+    .then((theme) => {
+        const containerEl = document.getElementById('main-component-container');
+        const splunkTheme = getThemeOptions(theme);
+        render(
+            <SplunkThemeProvider {...splunkTheme}>
+                <MyReactComponent name="World" />
+            </SplunkThemeProvider>,
+            containerEl
+        );
+    })
+    .catch((e) => {
+        const errorEl = document.createElement('span');
+        errorEl.innerHTML = e;
+        document.body.appendChild(errorEl);
+    });
