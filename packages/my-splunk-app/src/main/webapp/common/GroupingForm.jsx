@@ -141,7 +141,7 @@ export function Form({existingGrouping, readOnly = false}) {
         <FormProvider {...methods}>
             <MyForm onSubmit={handleSubmit(onSubmit)}>
                 <PageHeadingContainer>
-                    <PageHeading level={1}>{title}</PageHeading>
+                    <PageHeading>{title}</PageHeading>
                 </PageHeadingContainer>
                 <section>
                     {submissionError && <Message appearance="fill" type="error">

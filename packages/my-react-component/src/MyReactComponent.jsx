@@ -1,43 +1,36 @@
-import React from 'react';
-import {useSplunkTheme} from '@splunk/themes';
-import Heading from '@splunk/react-ui/Heading';
-import styled from 'styled-components';
-import {StyledButton} from "./StyledButton";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import Button from '@splunk/react-ui/Button';
 
-import {StyledContainer} from './MyReactComponentStyles';
+import { StyledContainer, StyledGreeting } from './MyReactComponentStyles';
 
+const propTypes = {
+    name: PropTypes.string,
+};
 
-const ButtonContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 1em;
-`;
+const MyReactComponent = ({ name = 'User' }) => {
+    const [counter, setCounter] = useState(0);
 
-const MyReactComponent = () => {
+    const message =
+        counter === 0
+            ? 'You should try clicking the button.'
+            : `You've clicked the button ${counter} time${counter > 1 ? 's' : ''}.`;
 
-    const theme = useSplunkTheme();
-    console.log(theme);
     return (
         <StyledContainer>
-            <Heading level={1}>Theme {theme.family} {theme.colorScheme}</Heading>
-            <Heading level={2}>Enabled</Heading>
-            <ButtonContainer>
-                {
-                    ["default", "primary", "secondary", "destructive"].map(
-                        (appearance) => <StyledButton key={`button-${theme.family}-${theme.colorScheme}-${appearance}`} appearance={appearance}>hello</StyledButton> )
-                }
-            </ButtonContainer>
-            <Heading level={2}>Disabled</Heading>
-            <ButtonContainer>
-                {
-                    ["default", "primary", "secondary", "destructive"].map(
-                        (appearance) => <StyledButton key={`button-${theme.family}-${theme.colorScheme}-${appearance}`} appearance={appearance} disabled>hello</StyledButton> )
-                }
-            </ButtonContainer>
+            <StyledGreeting data-testid="greeting">Hello, {name}!</StyledGreeting>
+            <div data-testid="message">{message}</div>
+            <Button
+                label="Click here"
+                appearance="primary"
+                onClick={() => {
+                    setCounter(counter + 1);
+                }}
+            />
         </StyledContainer>
     );
 };
 
-MyReactComponent.propTypes = {};
+MyReactComponent.propTypes = propTypes;
 
 export default MyReactComponent;

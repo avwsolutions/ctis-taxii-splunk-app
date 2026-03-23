@@ -2,8 +2,6 @@ import styled from "styled-components";
 import React, {useEffect} from 'react';
 import Table from '@splunk/react-ui/Table';
 import {variables} from "@splunk/themes";
-import PropTypes from "prop-types";
-import DL from "@splunk/react-ui/DefinitionList";
 
 const TableCell = styled(Table.Cell)`
     padding: ${variables.spacingXSmall} 0;
@@ -37,27 +35,21 @@ const LargeText = styled.span`
     font-size: ${variables.fontSizeLarge};
 `;
 
-const StyledDL = styled(DL)`
-  padding: 1em;
-
-  & > dd {
-    margin-bottom: 10px;
-  }
-`;
-
 function ExpandedDataRecord({mapping}) {
-    return (
-        <StyledDL termWidth="200px">
+    return (<Table>
+        <TableHead>
+            <TableHeadCell width={200}></TableHeadCell>
+            <TableHeadCell></TableHeadCell>
+        </TableHead>
+        <Table.Body>
             {Object.entries(mapping).map(([term, description]) => (
-                <>
-                    <StyledDL.Term>{term}</StyledDL.Term>
-                    <StyledDL.Description>{description}</StyledDL.Description>
-                </>
+                <TableRow key={term}>
+                    <TableCell>{term}</TableCell>
+                    <TableCell>{description}</TableCell>
+                </TableRow>
             ))}
-        </StyledDL>);
-}
-ExpandedDataRecord.propTypes = {
-    mapping: PropTypes.object.isRequired,
+        </Table.Body>
+    </Table>)
 }
 
 function getExpansionRow(row, rowKeyFunction, fieldNameToCellValue, numTableColumns) {

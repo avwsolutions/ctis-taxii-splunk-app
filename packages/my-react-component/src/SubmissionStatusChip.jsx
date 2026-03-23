@@ -13,8 +13,6 @@ import {variables} from "@splunk/themes";
 const StyledChip = styled(Chip)`
     background-color: ${props => props.backgroundColor};
 
-    width: fit-content;
-
     & div {
         color: ${props => props.foregroundColor || "white"};
     }

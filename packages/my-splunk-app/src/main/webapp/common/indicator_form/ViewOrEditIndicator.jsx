@@ -133,7 +133,7 @@ export default function ViewOrEditIndicator({indicatorId, editMode}) {
 
     return (<div>
         <PageHeadingContainer>
-            <PageHeading level={1}>{title}</PageHeading>
+            <PageHeading>{title}</PageHeading>
         </PageHeadingContainer>
         <Loader loading={loading} error={error}>
             <FormProvider {...methods}>

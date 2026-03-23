@@ -8,7 +8,6 @@ import {dateNowInSecondsPrecision, dateToIsoStringWithoutTimezone} from "@splunk
 import styled from "styled-components";
 import {variables} from "@splunk/themes";
 import {tlpV2RatingOptions} from "@splunk/my-react-component/src/tlpV2Rating";
-import {PageHeadingContainer} from "@splunk/my-react-component/PageHeading";
 import {getValidationSignal, submitData, validationDone} from './CommonProperties.slice'
 import {useRespondToValidationSignal} from "./formUtils";
 import {GroupingIdFieldV2} from "../../common/indicator_form/GroupingsDropdown";
@@ -67,9 +66,7 @@ const CommonPropertiesForm = () => {
 
     return (
         <StyledSection>
-            <PageHeadingContainer>
-                <Heading level={2}>Common Properties</Heading>
-            </PageHeadingContainer>
+            <Heading level={2}>Common Properties</Heading>
             <FormProvider {...formMethods}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <P>These properties will be shared by all indicators created on this form.</P>
