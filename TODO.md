@@ -1,5 +1,11 @@
 # CTIS TAXII ES Integration - TODO
 
+## Maintenance
+- [ ] Upgrade from React 16 to 18
+  - Create new Splunk UI project with https://splunkui.splunk.com/Packages/create/Overview (uses React 18)
+  - Replace existing `packages/`
+  - Test to ensure that themes are correctly applied (light and dark)
+
 ### Unknowns
 - [X] Logging: https://dev.splunk.com/enterprise/docs/developapps/addsupport/logging/loggingsplunkextensions
 - [X] Read from kvstore collection
