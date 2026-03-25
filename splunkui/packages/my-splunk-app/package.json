@@ -16,13 +16,17 @@
     "types:start": "yarn types:build --watch"
   },
   "dependencies": {
+    "@splunk/my-page": "^0.0.1",
+    "@splunk/react-icons": "^5.9.0",
     "@splunk/react-page": "^8.2.1",
+    "@splunk/react-toast-notifications": "^0.13.0",
     "@splunk/react-ui": "^5.9.0",
     "@splunk/splunk-utils": "^3.4.0",
     "@splunk/themes": "^1.6.0",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
-    "styled-components": "^5.3.10",
-    "@splunk/my-page": "^0.0.1"
+    "react-hook-form": "^7.72.0",
+    "styled-components": "^5.3.10"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",

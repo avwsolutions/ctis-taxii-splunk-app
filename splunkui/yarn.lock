@@ -1949,6 +1949,19 @@
     prop-types "^15.6.2"
     scriptjs "^2.5.8"
 
+"@splunk/react-toast-notifications@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@splunk/react-toast-notifications/-/react-toast-notifications-0.13.0.tgz#15c3b02721249d6198e0ee2fd1d5a8401e8b2933"
+  integrity sha512-kpC+5+DlokV4YHciteuSE/uS/hFYnzZjnqpj1t6rXZOKBnJrTlnk0Q0DXxRcQBz6GsPIXW63agJrAAos4lu0RQ==
+  dependencies:
+    "@splunk/react-icons" "^5.9.0"
+    "@splunk/react-ui" "^5.9.0"
+    "@splunk/themes" "^1.6.0"
+    "@splunk/ui-utils" "^1.12.0"
+    lodash "^4.17.14"
+    prop-types "^15.6.2"
+    react-flip-move "^3.0.1"
+
 "@splunk/react-ui@^5.8.0", "@splunk/react-ui@^5.9.0":
   version "5.9.0"
   resolved "https://registry.yarnpkg.com/@splunk/react-ui/-/react-ui-5.9.0.tgz#a9e95f10b6c8438a47a7a9b05bdcc49ca4ab58ee"
@@ -7783,6 +7796,16 @@ react-dom@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
+
+react-flip-move@^3.0.1:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/react-flip-move/-/react-flip-move-3.0.5.tgz#8b87510ad32ebef01ebca94902b445f456bbc0f7"
+  integrity sha512-Mf4XpbkUNZy9eu80iXXFIjToDvw+bnHxmKHVoositbMpV87O/EQswnXUqVovRHoTx/F+4dE+p//PyJnAT7OtPA==
+
+react-hook-form@^7.72.0:
+  version "7.72.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.72.0.tgz#995a655b894249fd8798f36383e43f55ed66ae25"
+  integrity sha512-V4v6jubaf6JAurEaVnT9aUPKFbNtDgohj5CIgVGyPHvT9wRx5OZHVjz31GsxnPNI278XMu+ruFz+wGOscHaLKw==
 
 react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.4:
   version "16.13.1"
