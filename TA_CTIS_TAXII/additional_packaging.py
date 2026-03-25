@@ -2,6 +2,9 @@ import logging
 import subprocess
 import pathlib
 import shutil
+import re
+import os
+
 logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger(__name__)
@@ -20,6 +23,17 @@ def replace_mako_page_path(html_filepath):
         with open(html_filepath, "w") as f:
             f.write(edited)
 
+def append_custom_conf_and_remove(custom_conf_filepath):
+    assert custom_conf_filepath.name.endswith(".custom.conf")
+    target_filename = re.sub(r'\.custom\.conf$', '.conf', custom_conf_filepath.name)
+    target_filepath = custom_conf_filepath.parent / target_filename
+
+    logger.info(f" >Appending {custom_conf_filepath} to {target_filepath}")
+    with open(target_filepath, "a") as f:
+        f.write(open(custom_conf_filepath).read())
+
+    logger.info(f" >Removing {custom_conf_filepath}")
+    os.remove(custom_conf_filepath)
 
 def additional_packaging(ta_name=None):
 
@@ -36,13 +50,17 @@ def additional_packaging(ta_name=None):
     shutil.copytree(splunkui_dir / "packages" / "my-splunk-app" / "stage" / "appserver", project_root / "output" / UCC_APP_NAME / "appserver", dirs_exist_ok=True)
 
     # For each html file in output/TA_CTIS_TAXII/appserver/templates replace `/static/app/my-splunk-app/pages/` with  `/static/app/TA_CTIS_TAXII/pages/`
-    templates_dir = project_root / "output" / UCC_APP_NAME / "appserver" / "templates"
+    output_app_dir = project_root / "output" / UCC_APP_NAME
+    templates_dir = output_app_dir / "appserver" / "templates"
     for filepath in templates_dir.rglob("*.html"):
         replace_mako_page_path(html_filepath=filepath)
 
-    # For XML view files, assume that we manually copy across each view to TA_CTIS_TAXII/package/default/data/ui/views
+    # Note: For XML view files, assume that we manually copy across each view to TA_CTIS_TAXII/package/default/data/ui/views
 
-    # TODO: append *.custom.conf to it's respective .conf file in output dir
+    default_dir = output_app_dir / "default"
+    for filepath in default_dir.rglob("*.custom.conf"):
+        logger.info(f"Custom .conf file: {filepath}")
+        append_custom_conf_and_remove(custom_conf_filepath=filepath)
 
 def cleanup_output_files(output_path: str, ta_name: str) -> None:
     """
