@@ -15,7 +15,7 @@ import P from "@splunk/react-ui/Paragraph";
 import {DeleteIndicatorModal} from "@splunk/my-page/src/DeleteModal";
 import useModal from "@splunk/my-page/src/useModal";
 import PropTypes from "prop-types";
-import {PageHeading, PageHeadingContainer} from "@splunk/my-page/PageHeading";
+import {PageHeading, PageHeadingContainer} from "@splunk/my-page/src/PageHeading";
 import {useOnFormSubmit} from "../formSubmit";
 import {usePatternSuggester} from "../../pages/new_indicator/patternSuggester";
 import useIndicatorCategories from "./indicatorCategories";

@@ -1,10 +1,10 @@
 import React from 'react';
 import Card from '@splunk/react-ui/Card';
-import {getIndicator, useGetRecord} from "@splunk/my-react-component/src/ApiClient";
 import P from "@splunk/react-ui/Paragraph";
 import styled from "styled-components";
 import {variables} from "@splunk/themes";
 import PropTypes from "prop-types";
+import {getIndicator, useGetRecord} from "./ApiClient";
 import Loader from "./Loader";
 import {viewIndicator} from "./urls";
 import {CardContainer, StyledCard} from "./CardLayout";

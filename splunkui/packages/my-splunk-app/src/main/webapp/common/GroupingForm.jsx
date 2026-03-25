@@ -22,7 +22,7 @@ import CancelButton from "@splunk/my-page/src/CancelButton";
 import useModal from "@splunk/my-page/src/useModal";
 import {DeleteGroupingModal} from "@splunk/my-page/src/DeleteModal";
 import PropTypes from "prop-types";
-import {PageHeading, PageHeadingContainer} from "@splunk/my-page/PageHeading";
+import {PageHeading, PageHeadingContainer} from "@splunk/my-page/src/PageHeading";
 import {ContextField, CreatedByField, DescriptionField, GroupingIdField, NameField} from "./grouping_form/fields";
 import {useOnFormSubmit} from "./formSubmit";
 import {usePageTitle} from "./utils";

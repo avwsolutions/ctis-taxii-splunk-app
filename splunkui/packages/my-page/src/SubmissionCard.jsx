@@ -1,12 +1,12 @@
 import React from 'react';
 import Card from '@splunk/react-ui/Card';
-import {getSubmissions, useGetRecord} from "@splunk/my-react-component/src/ApiClient";
 import P from "@splunk/react-ui/Paragraph";
 import styled from "styled-components";
 import moment from "moment";
 import DL from '@splunk/react-ui/DefinitionList';
 import {variables} from "@splunk/themes";
 import PropTypes from "prop-types";
+import {getSubmissions, useGetRecord} from "./ApiClient";
 import {urlForViewSubmission} from "./urls";
 import {SubmissionStatusChip} from "./SubmissionStatusChip";
 import Loader from "./Loader";
