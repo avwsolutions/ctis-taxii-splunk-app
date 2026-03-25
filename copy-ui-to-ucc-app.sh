@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set +xe
+# TODO: Remove this file (deprecated)
 # copy all of my-splunk-app/stage/appserver to TA_CTIS_TAXII/package/appserver
 rsync -avh --progress packages/my-splunk-app/stage/appserver/ TA_CTIS_TAXII/package/appserver
 # copy my-splunk-app/stage/default/data/ui/views to TA_CTIS_TAXII/package/default/data/ui/views

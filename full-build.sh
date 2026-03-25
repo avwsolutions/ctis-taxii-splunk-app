@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+# TODO: Remove this file (deprecated)
 set -xe
 
 # Build the SplunkUI app

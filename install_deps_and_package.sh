@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
-set -e
+set -xe
 working_dir=$(pwd)
 pip install -r dev-requirements.txt
 
 pip freeze # for debugging purposes
 
-# Build the component library
-cd packages/my-react-component && npm install
-
-cd "$working_dir"
+# Install splunk-ui project dependencies & run initial build
+cd splunkui
 yarn setup
 
+cd "$working_dir"
 cd integration_test && ./package.sh
 
