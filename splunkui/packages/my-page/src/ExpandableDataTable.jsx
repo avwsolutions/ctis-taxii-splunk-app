@@ -2,29 +2,8 @@ import styled from "styled-components";
 import React, {useEffect} from 'react';
 import Table from '@splunk/react-ui/Table';
 import {variables} from "@splunk/themes";
-
-const TableCell = styled(Table.Cell)`
-    padding: ${variables.spacingXSmall} 0;
-`
-const TableHeadCell = styled(Table.HeadCell)`
-    padding: 0;
-
-    & > div {
-        padding: 0;
-    }
-`
-const TableHead = styled(Table.Head)`
-    height: 0; // Hide the table header
-`
-const TableRow = styled(Table.Row)`
-    & > ${TableCell}:first-child {
-        font-weight: ${variables.fontWeightBold};
-    }
-
-    & > ${TableCell} {
-        font-size: ${variables.fontSizeLarge};
-    }
-`;
+import DL from '@splunk/react-ui/DefinitionList';
+import PropTypes from 'prop-types';
 
 const LargeBoldText = styled.span`
     font-weight: ${variables.fontWeightBold};
@@ -35,21 +14,26 @@ const LargeText = styled.span`
     font-size: ${variables.fontSizeLarge};
 `;
 
+const StyledDL = styled(DL)`
+    & > * {
+        padding-bottom: 0.5em;
+    }
+`;
+
 function ExpandedDataRecord({mapping}) {
-    return (<Table>
-        <TableHead>
-            <TableHeadCell width={200}></TableHeadCell>
-            <TableHeadCell></TableHeadCell>
-        </TableHead>
-        <Table.Body>
+    return (
+        <StyledDL layout="fixed" termWidth="200px">
             {Object.entries(mapping).map(([term, description]) => (
-                <TableRow key={term}>
-                    <TableCell>{term}</TableCell>
-                    <TableCell>{description}</TableCell>
-                </TableRow>
+                <>
+                    <StyledDL.Term>{term}</StyledDL.Term>
+                    <StyledDL.Description>{description}</StyledDL.Description>
+                </>
             ))}
-        </Table.Body>
-    </Table>)
+        </StyledDL>
+    );
+}
+ExpandedDataRecord.propTypes = {
+    mapping: PropTypes.object.isRequired,
 }
 
 function getExpansionRow(row, rowKeyFunction, fieldNameToCellValue, numTableColumns) {
