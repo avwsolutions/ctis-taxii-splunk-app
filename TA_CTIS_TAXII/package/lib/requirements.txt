@@ -1,4 +1,4 @@
-typing-extensions==4.15.0
+typing-extensions==4.14.0
 
 # Latest cattrs version that still supports Python 3.9
 # See PR: https://github.com/python-attrs/cattrs/pull/698

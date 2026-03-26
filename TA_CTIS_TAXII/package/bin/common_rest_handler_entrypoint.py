@@ -3,12 +3,13 @@ import sys
 import traceback
 import contextvars
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 sys.stderr.write(f"original sys.path: {sys.path}\n")
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "lib")))
 sys.stderr.write(f"updated sys.path: {sys.path}\n")
+sys.stderr.write(f"Python version: {sys.version}\n")
 
 try:
     from splunk.persistconn.application import PersistentServerConnectionApplication
@@ -84,6 +85,6 @@ class Handler(PersistentServerConnectionApplication):
             raise ValueError(f"Handler class {self.handler_name} not found")
 
     def handle(self, in_string):
-        ctx_request_time_utc.set(datetime.utcnow().isoformat(timespec="microseconds"))
+        ctx_request_time_utc.set(datetime.now(timezone.utc).isoformat(timespec="microseconds"))
         ctx_rest_handler.set(self.handler_name)
         return self.handler_instance.generate_response(in_string)
