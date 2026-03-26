@@ -34,19 +34,20 @@ function submitToEndpoint(method, endpoint, data, successHandler, errorHandler) 
     const url = createRESTURL(endpoint, {app});
     return fetch(url,
         {
-            method: method,
+            method,
             body: JSON.stringify(data),
             headers: {
                 'X-Splunk-Form-Key': getCSRFToken(),
                 'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json',
             }
         })
         .then(resp => {
             if (!resp.ok) {
                 return Promise.reject(resp);
-            } else {
-                return resp.json();
             }
+            return resp.json();
+
         })
         .then(successHandler)
         .catch(errorHandler);
