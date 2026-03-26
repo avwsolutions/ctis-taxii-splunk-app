@@ -41,12 +41,14 @@ SubmitToTaxiiButton.propTypes = {
 
 function GroupingActionButtons({row}) {
     const {open, handleRequestClose, handleRequestOpen} = useModal();
-    return (<HorizontalActionButtonLayout>
-        <SubmitToTaxiiButton row={row}/>
-        <EditIconOnlyButton to={editGroupingPage(row.grouping_id)}/>
-        <DeleteIconOnlyButton onClick={handleRequestOpen}/>
-        <DeleteGroupingModal open={open} onRequestClose={handleRequestClose} grouping={row}/>
-    </HorizontalActionButtonLayout>)
+    return (
+        <HorizontalActionButtonLayout>
+            <SubmitToTaxiiButton row={row} />
+            <EditIconOnlyButton to={editGroupingPage(row.grouping_id)} />
+            <DeleteIconOnlyButton onClick={handleRequestOpen} />
+            <DeleteGroupingModal open={open} onRequestClose={handleRequestClose} grouping={row} />
+        </HorizontalActionButtonLayout>
+    );
 }
 
 GroupingActionButtons.propTypes = {
