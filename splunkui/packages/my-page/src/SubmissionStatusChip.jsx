@@ -8,46 +8,31 @@ import InformationCircle from '@splunk/react-icons/InformationCircle';
 
 import ExclamationCircle from '@splunk/react-icons/ExclamationCircle';
 
-import {variables} from "@splunk/themes";
+import PropTypes from 'prop-types';
 
 const StyledChip = styled(Chip)`
-    background-color: ${props => props.backgroundColor};
-
-    & div {
-        color: ${props => props.foregroundColor || "white"};
-    }
+    width: fit-content;
 `;
-const ChipContents = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 2px;
-`;
-
-const COLOR_GREEN = '#1a8929';
 
 export function SubmissionStatusChip({status}) {
-    let backgroundColor = variables.statusColorInfo;
-    let foregroundColor = "white";
-    let icon = <InformationCircle/>;
+    let appearance = "info";
+    let icon = <InformationCircle variant="outlined"/>;
     if (status === "SCHEDULED") {
-        backgroundColor = variables.statusColorInfo;
-        icon = <Calendar/>;
+        icon = <Calendar variant="outlined"/>;
     } else if (status === "SENT") {
-        backgroundColor = COLOR_GREEN;
-        icon = <CheckCircle/>;
+        appearance = 'success';
+        icon = <CheckCircle variant="filled"/>;
     } else if (status === "FAILED") {
-        backgroundColor = variables.statusColorCritical;
-        icon = <ExclamationTriangle/>;
+        appearance = "error";
+        icon = <ExclamationTriangle variant="outlined"/>;
     } else if (status === "CANCELLED") {
-        backgroundColor = variables.accentColorWarning;
-        icon = <ExclamationCircle/>;
-        foregroundColor = "black";
+        appearance = "warning";
+        icon = <ExclamationCircle variant="outlined"/>;
     }
 
-    return <StyledChip backgroundColor={backgroundColor} foregroundColor={foregroundColor}>
-        <ChipContents>
-            {icon}
-            <span>{status}</span>
-        </ChipContents>
-    </StyledChip>;
+    return <StyledChip appearance={appearance} icon={icon}>{status}</StyledChip>;
+}
+
+SubmissionStatusChip.propTypes = {
+    status: PropTypes.string,
 }
