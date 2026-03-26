@@ -10,7 +10,7 @@ import {viewIndicator} from "./urls";
 import {CardContainer, StyledCard} from "./CardLayout";
 
 const StyledParagraph = styled(P)`
-    font-size: ${variables.fontSizeLarge};
+    font-size: ${variables.fontSize};
 `;
 
 export function IndicatorCard({indicatorId}) {
