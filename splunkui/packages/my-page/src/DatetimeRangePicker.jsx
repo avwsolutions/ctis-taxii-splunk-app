@@ -123,21 +123,47 @@ export function DatetimeRangePicker({
 
     const toggle = <MyDropdownButton label={`${labelPrefix}: ${selected}`} isMenu/>;
 
-    return (<StyledDropdown toggle={toggle} retainFocus closeReasons={closeReasons} {...props}>
-        <div style={{padding: 20}}>
-            <RadioList value={selected} onChange={onSelected}>
-                {optional && <RadioList.Option value={SELECTION_NOT_APPLIED}>{SELECTION_NOT_APPLIED}</RadioList.Option>}
-                <RadioList.Option value={SELECTION_ANY}>{SELECTION_ANY}</RadioList.Option>
-                <RadioList.Option value={SELECTION_LAST_24_HOURS}>{SELECTION_LAST_24_HOURS}</RadioList.Option>
-                <RadioList.Option value={SELECTION_LAST_7_DAYS}>{SELECTION_LAST_7_DAYS}</RadioList.Option>
-                <RadioList.Option value={SELECTION_LAST_30_DAYS}>{SELECTION_LAST_30_DAYS}</RadioList.Option>
-                <RadioList.Option value={SELECTION_DATE_RANGE}>{SELECTION_DATE_RANGE}</RadioList.Option>
-                {showDateRange && <DateRangeLayout>
-                    <DatetimeInput type="datetime-local" value={startDateIsoString} onChange={handleStartDateChange}/>
-                    <span>and</span>
-                    <DatetimeInput type="datetime-local" value={endDateIsoString} onChange={handleEndDateChange}/>
-                </DateRangeLayout>}
-            </RadioList>
-        </div>
-    </StyledDropdown>);
+    return (
+        <StyledDropdown toggle={toggle} retainFocus closeReasons={closeReasons} {...props}>
+            <div style={{ padding: 20 }}>
+                <RadioList value={selected} onChange={onSelected}>
+                    {optional && (
+                        <RadioList.Option value={SELECTION_NOT_APPLIED}>
+                            {SELECTION_NOT_APPLIED}
+                        </RadioList.Option>
+                    )}
+                    <RadioList.Option value={SELECTION_ANY}>{SELECTION_ANY}</RadioList.Option>
+                    <RadioList.Option value={SELECTION_LAST_24_HOURS}>
+                        {SELECTION_LAST_24_HOURS}
+                    </RadioList.Option>
+                    <RadioList.Option value={SELECTION_LAST_7_DAYS}>
+                        {SELECTION_LAST_7_DAYS}
+                    </RadioList.Option>
+                    <RadioList.Option value={SELECTION_LAST_30_DAYS}>
+                        {SELECTION_LAST_30_DAYS}
+                    </RadioList.Option>
+                    <RadioList.Option
+                        value={SELECTION_DATE_RANGE}
+                        description={
+                            <DateRangeLayout>
+                                <DatetimeInput
+                                    type="datetime-local"
+                                    value={startDateIsoString}
+                                    onChange={handleStartDateChange}
+                                />
+                                <span>and</span>
+                                <DatetimeInput
+                                    type="datetime-local"
+                                    value={endDateIsoString}
+                                    onChange={handleEndDateChange}
+                                />
+                            </DateRangeLayout>
+                        }
+                    >
+                        {SELECTION_DATE_RANGE}
+                    </RadioList.Option>
+                </RadioList>
+            </div>
+        </StyledDropdown>
+    );
 }
