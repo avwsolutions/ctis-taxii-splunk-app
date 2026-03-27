@@ -145,7 +145,7 @@ export default function Submission({debugMode=false}) {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <CustomControlGroup>
                     <HorizontalButtonLayout>
-                        <SubmitButton inline disabled={submitting} submitting={submitting}/>
+                        <SubmitButton inline disabled={submitting} submitting={submitting} />
                     </HorizontalButtonLayout>
                 </CustomControlGroup>
             </form>
@@ -157,26 +157,28 @@ export default function Submission({debugMode=false}) {
             </Modal>
             <Modal open={submitSuccess}>
                 <Modal.Header
-                    title={`Successfully Created New Indicator${numIndicators > 1 ? "s" : ""}`}
+                    title={`Successfully Created New Indicator${numIndicators > 1 ? 's' : ''}`}
                 />
                 <Modal.Body>
                     <P>To submit to TAXII server, proceed to submit the Grouping.</P>
-                    <GotoIndicatorsPageButton/>
-                    <SubmitGroupingButton groupingId={groupingId}/>
+                    <HorizontalButtonLayout>
+                        <GotoIndicatorsPageButton />
+                        <SubmitGroupingButton groupingId={groupingId} />
+                    </HorizontalButtonLayout>
                 </Modal.Body>
             </Modal>
-            {debugMode && <div>
-                <div>{waiting ? "Waiting" : "Not Waiting"}</div>
-                <div>{submitting ? "Submitting" : "Not submitting"}</div>
-                {submitSuccess && <div>Submit Success</div>}
+            {debugMode && (
                 <div>
-                    <code>
-                        {JSON.stringify(formData, null, 2)}
-                    </code>
+                    <div>{waiting ? 'Waiting' : 'Not Waiting'}</div>
+                    <div>{submitting ? 'Submitting' : 'Not submitting'}</div>
+                    {submitSuccess && <div>Submit Success</div>}
+                    <div>
+                        <code>{JSON.stringify(formData, null, 2)}</code>
+                    </div>
                 </div>
-            </div>}
+            )}
         </section>
-    )
+    );
 }
 Submission.propTypes = {
     debugMode: PropTypes.bool
