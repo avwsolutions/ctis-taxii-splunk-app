@@ -18,7 +18,7 @@
       "@semantic-release/github",
       {
         "assets": [
-          { "path": "dist/*.tar.gz", "label": "App Build" },
+          { "path": "dist/*.tar.gz", "label": "App Build v${nextRelease.version}" },
           { "path": "dist/ctis*.pdf", "label": "Documentation v${nextRelease.version}" }
         ]
       }
