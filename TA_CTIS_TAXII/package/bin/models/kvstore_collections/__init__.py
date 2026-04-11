@@ -4,6 +4,7 @@ from .collection_name import CollectionName
 from .groupings_collection import GroupingsCollection
 from .identities_collection import IdentitiesCollection
 from .indicators_collection import IndicatorsCollection
+from .sightings_collection import SightingsCollection
 from .submissions_collection import SubmissionsCollection
 
 COLLECTION_NAME_TO_COLLECTION_CLASS = {

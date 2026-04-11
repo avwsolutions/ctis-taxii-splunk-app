@@ -14,6 +14,10 @@
         <view name="indicators"/>
         <view name="new_indicator"/>
     </collection>
+    <collection label="Sightings">
+        <view name="sightings"/>
+        <view name="new_sighting"/>
+    </collection>    
     <view name="submissions"/>
     <view name="search"/>
 </nav>
