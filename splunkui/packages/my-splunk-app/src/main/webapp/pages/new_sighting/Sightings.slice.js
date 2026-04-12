@@ -22,11 +22,11 @@ export const sightingsSlice = createSlice({
             state.lastSignalRespondedTo[id] = action.payload.signal;
             state.errors[id] = action.payload.errors;
         },
-        addIndicator: (state, action) => {
+        addSighting: (state, action) => {
             const newId = uuidv4();
             state.sightings[newId] = action.payload || {};
         },
-        removeIndicator: (state, action) => {
+        removeSighting: (state, action) => {
             delete state.sightings[action.payload.id];
             if(state.submissionErrors[action.payload.id]){
                 delete state.submissionErrors[action.payload.id];
@@ -65,8 +65,8 @@ export const {
     submitData,
     triggerValidationSignal,
     validationDone,
-    addIndicator,
-    removeIndicator,
+    addSighting,
+    removeSighting,
     addSubmissionError,
     clearAllSubmissionErrors
 } = sightingsSlice.actions;

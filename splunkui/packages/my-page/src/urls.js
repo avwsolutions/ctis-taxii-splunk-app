@@ -5,6 +5,9 @@ import React from "react";
 export const VIEW_INDICATORS_PAGE = createURL(`/app/${app}/indicators`);
 export const NEW_INDICATOR_PAGE = createURL(`/app/${app}/new_indicator`);
 
+export const VIEW_SIGHTINGS_PAGE = createURL(`/app/${app}/sightings`);
+export const NEW_SIGHTING_PAGE = createURL(`/app/${app}/new_sighting`);
+
 export const VIEW_IDENTITIES_PAGE = createURL(`/app/${app}/identities`);
 export const NEW_IDENTITY_PAGE = createURL(`/app/${app}/new_identity`);
 
@@ -15,6 +18,10 @@ export const VIEW_CONFIGURATION_PAGE = createURL(`/app/${app}/configuration`);
 
 export const viewIndicator = (indicatorId) => createURL(`/app/${app}/indicators`, {
     indicator_id: indicatorId,
+});
+
+export const viewSighting = (sightingId) => createURL(`/app/${app}/indicators`, {
+    sighting_id: sightingId,
 });
 
 export const viewGrouping = (groupingId) => createURL(`/app/${app}/groupings`, {
@@ -38,6 +45,11 @@ export const urlForSubmitGrouping = (groupingId) => createURL(`/app/${app}/submi
 export const urlForEditIndicator = (indicatorId) => createURL(`/app/${app}/indicators`, {
     action: 'edit',
     indicator_id: indicatorId,
+});
+
+export const urlForEditSighting = (sightingId) => createURL(`/app/${app}/sightings`, {
+    action: 'edit',
+    sighting_id: sightingId,
 });
 
 export const urlForViewSubmission = (submissionId) => createURL(`/app/${app}/submissions`, {
@@ -64,4 +76,8 @@ export function GroupingIdLink({groupingId}) {
 
 export function IndicatorIdLink({indicatorId}) {
     return (<a href={viewIndicator(indicatorId)}>{indicatorId}</a>)
+}
+
+export function SightingIdLink({sightingId}) {
+    return (<a href={viewSighting(sightingId)}>{sightingId}</a>)
 }
