@@ -62,9 +62,3 @@ To configure a proxy server, navigate to the 'Proxy' configuration tab.
 Username/password authentication is supported.
 
 ![Proxy Config](img/configuration_proxy.png)
-
-## Notes
-Proxy server configuration and disabling TLS/SSL verification is not currently supported in this app.
-
-If these or similar network configurations are required, please [raise an issue in the Github repository](index.md#support).
-
