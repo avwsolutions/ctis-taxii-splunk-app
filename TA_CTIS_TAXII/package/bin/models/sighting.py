@@ -1,9 +1,5 @@
-from __future__ import annotations
-
 from attrs import define, field
-from datetime import datetime
 from uuid import uuid4
-from typing import Optional, List
 
 from stix2 import Sighting
 
@@ -17,9 +13,9 @@ class SightingModelV1(BaseModelV1):
 
     @sighting_id.default
     def _default_sighting_id(self):
-        return f'sighting--{uuid4()}'
+        return 'sighting--{}'.format(uuid4())
 
-    sighting_of_ref = field()
+    sighting_of_ref = field(default=None)
 
     description = field(default=None)
 

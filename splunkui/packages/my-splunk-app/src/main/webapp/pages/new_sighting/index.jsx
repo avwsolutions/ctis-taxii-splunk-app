@@ -1,14 +1,6 @@
 import React from 'react';
-import {AppContainer} from "@splunk/my-page/src/AppContainer";
-import SightingForm from "../../common/SightingForm";
-import {layoutWithTheme} from "../../common/theme";
+import SightingForm from '../../common/SightingForm';
 
-function MainComponent() {
-    return (
-        <AppContainer>
-            <SightingForm/>
-        </AppContainer>
-    )
+export default function NewSightingPage() {
+    return <SightingForm />;
 }
-
-layoutWithTheme(<MainComponent/>);
