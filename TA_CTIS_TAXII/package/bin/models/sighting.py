@@ -13,35 +13,35 @@ from .base import BaseModelV1
 @define(slots=False, kw_only=True)
 class SightingModelV1(BaseModelV1):
 
-    sighting_id: str = field()
+    sighting_id = field()
 
     @sighting_id.default
     def _default_sighting_id(self):
         return f'sighting--{uuid4()}'
 
-    sighting_of_ref: str = field()
+    sighting_of_ref = field()
 
-    description: Optional[str] = field(default=None)
+    description = field(default=None)
 
-    where_sighted_refs: List[str] = field(factory=list)
+    where_sighted_refs = field(factory=list)
 
-    first_seen: Optional[datetime] = field(default=None)
+    first_seen = field(default=None)
 
-    last_seen: Optional[datetime] = field(default=None)
+    last_seen = field(default=None)
 
-    count: int = field(default=1)
+    count = field(default=1)
 
-    summary: bool = field(default=False)
+    summary = field(default=False)
 
-    created_by_ref: Optional[str] = field(default=None)
+    created_by_ref = field(default=None)
 
-    confidence: int = field(default=50)
+    confidence = field(default=50)
 
-    revoked: bool = field(default=False)
+    revoked = field(default=False)
 
-    labels: List[str] = field(factory=list)
+    labels = field(factory=list)
 
-    object_marking_refs: List[str] = field(factory=list)
+    object_marking_refs = field(factory=list)
 
     def validate(self):
 
