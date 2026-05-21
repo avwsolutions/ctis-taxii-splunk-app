@@ -425,3 +425,56 @@ export function listIndicatorCategories(successHandler, errorHandler) {
         successHandler, errorHandler
     })
 }
+
+export function postCreateSighting(data, successHandler, errorHandler) {
+    return postData('create-sighting', data, successHandler, errorHandler)
+}
+
+export function editSighting(data, successHandler, errorHandler) {
+    return postData('edit-sighting', data, successHandler, errorHandler)
+}
+
+export function deleteSighting({sightingId, successHandler, errorHandler}) {
+    return deleteData({
+        endpoint: 'delete-sighting',
+        data: {sighting_id: sightingId},
+        successHandler,
+        errorHandler
+    })
+}
+
+export function getSightings({
+    skip = 0,
+    limit = 0,
+    successHandler,
+    errorHandler,
+    query,
+    sort = SORT_MODIFIED_DESC,
+    ...rest
+}) {
+    return getData({
+        endpoint: 'list-sightings',
+        queryParams: {
+            skip,
+            limit,
+            sort
+        },
+        query,
+        successHandler,
+        errorHandler,
+        ...rest
+    })
+}
+
+export function getSighting({sightingId, successHandler, errorHandler}) {
+    return getData({
+        endpoint: 'list-sightings',
+        query: {
+            sighting_id: sightingId
+        },
+        successHandler: (resp) => {
+            successHandler(resp.records[0]);
+        },
+        errorHandler
+    })
+}
