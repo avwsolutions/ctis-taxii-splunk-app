@@ -1,85 +1,109 @@
+import React from 'react';
 import styled from 'styled-components';
-                        <input
-                            type='number'
-                            min='1'
-                            max='100'
-                            disabled={false}
-                            {...methods.register(FIELD_COUNT)}
-                        />
-                    </CustomControlGroup>
+import { FormProvider, useForm } from 'react-hook-form';
 
-                    <CustomControlGroup>
-                        <label>Confidence</label>
-                        <input
-                            type='number'
-                            min='1'
-                            max='100'
-                            disabled={false}
-                            {...methods.register(FIELD_CONFIDENCE)}
-                        />
-                    </CustomControlGroup>
+import Button from '@splunk/react-ui/Button';
+import Message from '@splunk/react-ui/Message';
+import Modal from '@splunk/react-ui/Modal';
 
-                    <HorizontalButtonLayout>
-                        <SubmitButton
-                            inline
-                            disabled={submitButtonDisabled}
-                            submitting={formState.isSubmitting}
-                            label={editMode ? 'Edit Sighting' : 'Create Sighting'}
-                        />
+import SubmitButton from '@splunk/my-page/src/SubmitButton';
 
-                        <Button
-                            appearance='secondary'
-                            label='Cancel'
-                            to={VIEW_SIGHTINGS_PAGE}
-                        />
-                    </HorizontalButtonLayout>
-                </section>
+const MyForm = styled.form`
+    max-width: 900px;
+`;
 
-                <Modal open={submitSuccess}>
-                    <Modal.Header
-                        title={editMode
-                            ? 'Successfully Updated Sighting'
-                            : 'Successfully Created Sighting'}
-                    />
+const FIELD_DESCRIPTION = 'description';
+const FIELD_COUNT = 'count';
+const FIELD_CONFIDENCE = 'confidence';
 
-                    <Modal.Body>
-                        <GotoSightingsPageButton />
-                    </Modal.Body>
-                </Modal>
-            </MyForm>
-        </FormProvider>
-    );
-}
+export default function SightingForm() {
 
-Form.propTypes = {
-    existingSighting: PropTypes.object,
-};
-
-function EditModeForm({sightingId}) {
-    const {
-        record: sighting,
-        loading,
-        error,
-    } = useGetRecord({
-        restGetFunction: getSighting,
-        restFunctionQueryArgs: {
-            sightingId,
+    const methods = useForm({
+        mode: 'all',
+        defaultValues: {
+            description: '',
+            count: 1,
+            confidence: 50,
         },
     });
 
+    const {
+        handleSubmit,
+        formState,
+    } = methods;
+
+    const onSubmit = (data) => {
+        console.log(data);
+    };
+
     return (
-        <Loader loading={loading} error={error}>
-            <Form existingSighting={sighting} />
-        </Loader>
+        <FormProvider {...methods}>
+            <MyForm onSubmit={handleSubmit(onSubmit)}>
+
+                <Message type='info'>
+                    Create New Sighting
+                </Message>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label>Description</label>
+
+                    <textarea
+                        style={{
+                            width: '100%',
+                            minHeight: '120px',
+                        }}
+                        {...methods.register(FIELD_DESCRIPTION)}
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label>Count</label>
+
+                    <input
+                        type='number'
+                        min='1'
+                        max='100'
+                        {...methods.register(FIELD_COUNT)}
+                    />
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label>Confidence</label>
+
+                    <input
+                        type='number'
+                        min='1'
+                        max='100'
+                        {...methods.register(FIELD_CONFIDENCE)}
+                    />
+                </div>
+
+                <div style={{
+                    display: 'flex',
+                    gap: '12px',
+                }}>
+                    <SubmitButton
+                        inline
+                        disabled={formState.isSubmitting}
+                        submitting={formState.isSubmitting}
+                        label='Create Sighting'
+                    />
+
+                    <Button
+                        appearance='secondary'
+                        label='Cancel'
+                    />
+                </div>
+
+                <Modal open={false}>
+                    <Modal.Header title='Success' />
+
+                    <Modal.Body>
+                        Sighting created
+                    </Modal.Body>
+                </Modal>
+
+            </MyForm>
+        </FormProvider>
     );
-}
-
-EditModeForm.propTypes = {
-    sightingId: PropTypes.string.isRequired,
-};
-
-export default function SightingForm({editMode, sightingId}) {
-    return editMode
-        ? <EditModeForm sightingId={sightingId} />
-        : <Form />;
 }
