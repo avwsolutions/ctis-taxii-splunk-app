@@ -29,6 +29,10 @@ try:
     from rest_edit_identity import EditIdentityHandler
     from rest_delete_identity import DeleteIdentityHandler
     from rest_list_identities import ListIdentitiesHandler
+    from rest_create_sighting import CreateSightingHandler
+    from rest_edit_sighting import EditSightingHandler
+    from rest_delete_sighting import DeleteSightingHandler
+    from rest_list_sightings import ListSightingsHandler
     from rest_list_indicator_categories import ListIndicatorCategoriesHandler
     from rest_create_grouping import CreateGroupingHandler
     from rest_list_groupings import ListGroupingsHandler
