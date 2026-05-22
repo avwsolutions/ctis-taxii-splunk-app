@@ -444,23 +444,6 @@ export function listIndicatorCategories(successHandler, errorHandler) {
     })
 }
 
-export function postCreateSighting(data, successHandler, errorHandler) {
-    return postData('create-sighting', data, successHandler, errorHandler)
-}
-
-export function editSighting(data, successHandler, errorHandler) {
-    return postData('edit-sighting', data, successHandler, errorHandler)
-}
-
-export function deleteSighting({sightingId, successHandler, errorHandler}) {
-    return deleteData({
-        endpoint: 'delete-sighting',
-        data: {sighting_id: sightingId},
-        successHandler,
-        errorHandler
-    })
-}
-
 export function getSightings({
     skip = 0,
     limit = 0,
