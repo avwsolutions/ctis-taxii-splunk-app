@@ -20,7 +20,7 @@ export const viewIndicator = (indicatorId) => createURL(`/app/${app}/indicators`
     indicator_id: indicatorId,
 });
 
-export const viewSighting = (sightingId) => createURL(`/app/${app}/indicators`, {
+export const viewSighting = (sightingId) => createURL(`/app/${app}/sightings`, {
     sighting_id: sightingId,
 });
 

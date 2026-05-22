@@ -10,7 +10,7 @@ import {useDebounce} from "./debounce";
 import {DatetimeRangePicker} from "./DatetimeRangePicker";
 import SearchableSelect from "./search/SearchableSelect";
 import {generateRegexQueryForFields} from "./search/util";
-import {getGroupings, getIdentities, getIndicators, getSubmissions} from "./ApiClient";
+import {getGroupings, getIdentities, getIndicators, getSubmissions, getSightings} from "./ApiClient";
 import {tlpV2RatingOptions} from "./tlpV2Rating";
 
 const SearchControlContainer = styled.div`
@@ -138,6 +138,27 @@ export const GroupingsSearchBar = ({onQueryChange}) => {
     );
 }
 GroupingsSearchBar.propTypes = {
+    onQueryChange: PropTypes.func.isRequired
+}
+
+export const SightingsSearchBar = ({onQueryChange}) => {
+    const TEXT_SEARCH_FIELDS = ['name', 'sighting_id', 'sighting_class'];
+    const [sightingFilter, setSightingFilter] = useState(null);
+    return (
+        <SearchBar onQueryChange={onQueryChange} fullTextSearchFields={TEXT_SEARCH_FIELDS}
+                   subqueries={[sightingFilter]}>
+            <SearchableSelect searchableFields={['name', 'sighting_id']}
+                              prefixLabel="Sighting"
+                              placeholder="Sighting..."
+                              restGetFunction={getSightings}
+                              queryFilterField="sighting_id"
+                              initialSelectionQueryParamName="sighting_id"
+                              selectOptionLabelFunction={(record) => `${record.name} (${record.sighting_id})`}
+                              onQueryChange={setSightingFilter}/>
+        </SearchBar>
+    );
+}
+IdentitiesSearchBar.propTypes = {
     onQueryChange: PropTypes.func.isRequired
 }
 

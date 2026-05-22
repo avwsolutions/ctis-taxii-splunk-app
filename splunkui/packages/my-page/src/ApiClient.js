@@ -102,12 +102,20 @@ export function postCreateIndicator(data, successHandler, errorHandler) {
     return postData('create-indicator', data, successHandler, errorHandler)
 }
 
+export function postCreateSighting(data, successHandler, errorHandler) {
+    return postData('create-sighting', data, successHandler, errorHandler)
+}
+
 export function postCreateIdentity(data, successHandler, errorHandler) {
     return postData('create-identity', data, successHandler, errorHandler)
 }
 
 export function postCreateGrouping(data, successHandler, errorHandler) {
     return postData('create-grouping', data, successHandler, errorHandler)
+}
+
+export function editSighting(data, successHandler, errorHandler) {
+    return postData('edit-sighting', data, successHandler, errorHandler)
 }
 
 export function editIdentity(data, successHandler, errorHandler) {
@@ -127,6 +135,16 @@ export function deleteIdentity({identityId, successHandler, errorHandler}) {
     return deleteData({
         endpoint: 'delete-identity',
         data: {identity_id: identityId},
+        successHandler,
+        errorHandler
+    })
+}
+
+export function deleteSighting({sightingId, successHandler, errorHandler}) {
+    console.log('Deleting sighting:', sightingId);
+    return deleteData({
+        endpoint: 'delete-sighting',
+        data: {sighting_id: sightingId},
         successHandler,
         errorHandler
     })
