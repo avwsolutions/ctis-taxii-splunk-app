@@ -230,6 +230,24 @@ export function getIdentities({
     })
 }
 
+export function getSightings({
+                                  skip = 0,
+                                  limit = 0,
+                                  successHandler,
+                                  errorHandler,
+                                  query,
+                                  sort = SORT_MODIFIED_DESC,
+                                  ...rest
+                              }) {
+    return getData({
+        endpoint: 'list-sightings',
+        queryParams: {
+            skip, limit, sort
+        },
+        query, successHandler, errorHandler, ...rest
+    })
+}
+
 // Note: fields="" means all fields
 export function getSubmissions({
                                    skip = 0,
@@ -415,6 +433,17 @@ export function getIdentity({identityId, successHandler, errorHandler}) {
     })
 }
 
+export function getSighting({sightingId, successHandler, errorHandler}) {
+    return getExactlyOneRecord({
+        query: {
+            "identity_id": sightingId
+        },
+        endpoint: 'list-sightings',
+        successHandler,
+        errorHandler
+    })
+}
+
 export function getGrouping({groupingId, successHandler, errorHandler}) {
     return getExactlyOneRecord({
         query: {
@@ -441,41 +470,5 @@ export function listIndicatorCategories(successHandler, errorHandler) {
     return getData({
         endpoint: 'list-ioc-categories',
         successHandler, errorHandler
-    })
-}
-
-export function getSightings({
-    skip = 0,
-    limit = 0,
-    successHandler,
-    errorHandler,
-    query,
-    sort = SORT_MODIFIED_DESC,
-    ...rest
-}) {
-    return getData({
-        endpoint: 'list-sightings',
-        queryParams: {
-            skip,
-            limit,
-            sort
-        },
-        query,
-        successHandler,
-        errorHandler,
-        ...rest
-    })
-}
-
-export function getSighting({sightingId, successHandler, errorHandler}) {
-    return getData({
-        endpoint: 'list-sightings',
-        query: {
-            sighting_id: sightingId
-        },
-        successHandler: (resp) => {
-            successHandler(resp.records[0]);
-        },
-        errorHandler
     })
 }
