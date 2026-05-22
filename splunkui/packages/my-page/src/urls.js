@@ -61,6 +61,11 @@ export const editIdentityPage = (identityId) => createURL(`/app/${app}/identitie
     action: 'edit',
 });
 
+export const editSightingPage = (sightingId) => createURL(`/app/${app}/sightings`, {
+    sighting_id: SightingId,
+    action: 'edit',
+});
+
 export const editGroupingPage = (groupingId) => createURL(`/app/${app}/groupings`, {
     grouping_id: groupingId,
     action: 'edit',
