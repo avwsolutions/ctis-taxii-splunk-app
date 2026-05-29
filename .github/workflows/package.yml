@@ -136,7 +136,7 @@ jobs:
       #                uses: lhotari/action-upterm@v1
       #                with:
       #                    limit-access-to-actor: true
-      - name: Spin up Docker Splunk with app
+      - name: Spin up Docker Splunk with App
         run: cd integration_test && ./spin-up-docker-splunk.sh
         env:
           SPLUNK_PASSWORD: ${{ secrets.SPLUNK_PASSWORD }}
